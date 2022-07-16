@@ -1,6 +1,27 @@
+// ---------------------------------------------------------------------
+// This template script adds a few useful arguments to the mcbuild cli:
+// -package: Build and package the world, data pack, and resource pack.
+// ---------------------------------------------------------------------
+
+const { exec } = require('child_process')
+
 module.exports = {
 	global: {
-		onBuildSuccess: null,
+		onBuildSuccess: (build) => {
+			if (process.argv.includes('-package')) {
+				exec(
+					`.\\package.ps1`,
+					{ shell: 'powershell.exe', cwd: '..'},
+					(err, stdout, stderr) => {
+						if (err) {
+							console.error(err)
+							return
+						}
+						console.log(stdout)
+					}
+				)
+			}
+		},
 	},
 	mc: {
 		dev: true,
