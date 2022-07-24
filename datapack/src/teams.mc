@@ -13,3 +13,4 @@ function join_a {
 function join_b {
 	team join b @s
 }
+

@@ -9,6 +9,10 @@
     - Fly to the nearest undefended 
   - Worker bees
 
+- Switch bees over to a state based AI - VERY IMPORTANT FOR PERFORMANCE
+- Add a failsafe that teleports bees if they don't reach their target after a certain amount of time
+- Figure out how to add a sin wave movement to the bees flight
+
 - Add attribution to bensound.com for music
 
 # IDEAS
