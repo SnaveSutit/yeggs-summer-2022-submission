@@ -53,6 +53,10 @@ clock 2t {
 	execute if score #drone.tick_flipflop v matches 1 as @e[type=bee,tag=drone,tag=tick_b] at @s run function drones:state_tick
 }
 
+clock 2t {
+	execute as @e[type=bee,tag=drone] at @s run function drones:update_rotation
+}
+
 clock 1t {
 	execute as @e[type=bee,tag=drone] at @s run {
 		execute if score @s state = #drone.pollen.GOTO_TARGET state run function drones:apply_motion
@@ -150,31 +154,38 @@ function state_tick {
 	}
 }
 
-function set_motion {
+function update_rotation {
 	scoreboard players operation # v = @s target
 	tag @s add this.drone
 	execute as @e[type=marker,tag=drone_target] if score @s id = # v run {
 		function math:other/get/pos
 		tag @s add this.target
+		# tp @e[type=bee,tag=this.drone,distance=..1,limit=1] ~ ~ ~ facing entity @s feet
 		execute as @e[type=bee,tag=this.drone,distance=..1,limit=1] at @s anchored eyes facing entity @e[type=marker,tag=this.target] feet positioned ^ ^ ^0.5 rotated as @s positioned ^ ^ ^1 facing entity @s eyes facing ^ ^ ^-1 positioned as @s rotated ~ 0 run tp @s ~ ~ ~ ~ ~
 		tag @s remove this.target
 	}
 	tag @s remove this.drone
+}
+
+function set_motion {
 	function math:this/get/pos
 	function math:get/direction_this_to_other
 	function math:this/get/motion
 	scoreboard players operation #direction.x v /= 30 v
-	scoreboard players operation #direction.y v /= 30 v
+	scoreboard players operation #direction.y v /= 20 v
 	scoreboard players operation #direction.z v /= 30 v
 	scoreboard players operation #this.motion.x v += #direction.x v
 	scoreboard players operation #this.motion.y v += #direction.y v
 	scoreboard players operation #this.motion.z v += #direction.z v
-	execute at @s rotated ~ 0 unless block ^ ^ ^1 air run scoreboard players add #this.motion.y v 20
+
+	execute at @s rotated ~ 0 unless block ^ ^ ^1 air run scoreboard players add #this.motion.y v 10
+	execute at @s rotated ~ 0 unless block ~ ~-2 ~ air run scoreboard players add #this.motion.y v 10
+
 	scoreboard players operation @s motion.x = #this.motion.x v
 	scoreboard players operation @s motion.y = #this.motion.y v
 	scoreboard players operation @s motion.z = #this.motion.z v
 	# title @a actionbar ["","x:",{"score":{"name":"#this.pos.x","objective":"v"}}," y:",{"score":{"name":"#this.pos.y","objective":"v"}}," z:",{"score":{"name":"#this.pos.z","objective":"v"}}]
-	# title @a actionbar ["","x:",{"score":{"name":"#this.motion.x","objective":"v"}}," y:",{"score":{"name":"#this.motion.y","objective":"v"}}," z:",{"score":{"name":"#this.motion.z","objective":"v"}}]
+	title @a actionbar ["","x:",{"score":{"name":"#this.motion.x","objective":"v"}}," y:",{"score":{"name":"#this.motion.y","objective":"v"}}," z:",{"score":{"name":"#this.motion.z","objective":"v"}}]
 }
 
 function apply_motion {
