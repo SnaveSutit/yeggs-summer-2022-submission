@@ -9,7 +9,7 @@
     - Fly to the nearest undefended 
   - Worker bees
 
-
+- Add attribution to bensound.com for music
 
 # IDEAS
 - Player's armor should be bee themed
