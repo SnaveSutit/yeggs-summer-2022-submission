@@ -7,6 +7,15 @@ function load {
 
 	scoreboard objectives add honey dummy
 
+	scoreboard objectives add display_a dummy ["",{"text":"Team","color":"white"}," ",{"text":"Wasp","color":"dark_gray"}]
+	scoreboard objectives add display_b dummy ["",{"text":"Team","color":"white"}," ",{"text":"Bee","color":"yellow"}]
+	scoreboard objectives setdisplay sidebar.team.dark_gray display_a
+	scoreboard objectives setdisplay sidebar.team.yellow display_b
+	scoreboard players set [Honey] display_a 0
+	scoreboard players set [Wax] display_a 0
+	scoreboard players set [Honey] display_b 0
+	scoreboard players set [Wax] display_b 0
+
 	scoreboard objectives add gen_timer dummy
 
 	scoreboard objectives add state dummy
@@ -36,6 +45,8 @@ function load {
 }
 
 function reset {
+	kill @e[type=bee,tag=drone]
+	kill @e[type=bee,tag=attacker]
 	kill @e[type=marker,tag=hive]
 	kill @e[type=marker,tag=drone_target]
 	kill @e[type=marker,tag=gen.pollen]
@@ -70,4 +81,14 @@ function reset {
 	execute positioned -44 29 -187 run function targets:summon_wax
 	execute positioned -3 26 -224 run function targets:summon_wax
 	execute positioned 40 29 -263 run function targets:summon_wax
+
+	LOOP(['a','b'],team){
+		scoreboard players set .team_<%team%> honey 0
+	}
+}
+
+function tick {
+	LOOP(['a','b'],team){
+		scoreboard players operation [Honey] display_<%team%> = .team_<%team%> honey
+	}
 }

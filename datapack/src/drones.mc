@@ -96,42 +96,46 @@ function state_tick {
 		}
 	}
 
-	execute if score @s state = #drone.pollen.GET_TARGET state run {
-		execute (if entity @e[type=marker,tag=gen.pollen,scores={pollen=10..}]) {
-			execute as @e[type=marker,tag=gen.pollen,sort=random,scores={pollen=10..}] at @s run {
-				scoreboard players operation #target v = @e[type=marker,tag=drone_target,tag=pollen,distance=..1,limit=1] id
-			}
-			scoreboard players operation @s target = #target v
-			scoreboard players operation @s state = #drone.pollen.GOTO_TARGET state
-		} else {
-			# If no target was found, then return to choose resource state
-			scoreboard players operation @s state = #drone.CHOOSE_RESOURCE state
-		}
-	}
-
-	execute if score @s state = #drone.pollen.GOTO_TARGET state run {
-		execute if entity @e[type=marker,tag=gen.pollen,distance=..1] run {
-			tag @s add this.drone
-			scoreboard players set #collected v 0
-			scoreboard players set #space v 10
-			scoreboard players operation #space v -= @s pollen
-			execute as @e[type=marker,tag=gen.pollen,distance=..1,limit=1] run {
-				execute if score @s pollen >= #space v run {
-					scoreboard players operation @s pollen -= #space v
-					# say Collected pollen!
-					scoreboard players set #collected v 1
+	LOOP(['pollen', 'wax'],resource) {
+		execute if score @s state = #drone.<%resource%>.GET_TARGET state run {
+			LOOP(['a','b'],team){
+				execute (if entity @s[team=<%team%>] if entity @e[type=marker,tag=gen.<%resource%>,scores={<%resource%>=<%resource.length*2%>..},tag=captured_by_<%team%>]) {
+					execute as @e[type=marker,tag=gen.<%resource%>,sort=random,scores={<%resource%>=<%resource.length*2%>..},tag=captured_by_<%team%>] at @s run {
+						scoreboard players operation #target v = @e[type=marker,tag=drone_target,tag=<%resource%>,distance=..1,limit=1] id
+					}
+					scoreboard players operation @s target = #target v
+					scoreboard players operation @s state = #drone.<%resource%>.GOTO_TARGET state
+				} else {
+					# If no target was found, then return to choose resource state
+					scoreboard players operation @s state = #drone.CHOOSE_RESOURCE state
 				}
 			}
-			# If no resources were collected, find another resource node.
-			execute if score #collected v matches 0 run scoreboard players operation @s state = #drone.CHOOSE_RESOURCE state
-			execute if score #collected v matches 1 run {
-				scoreboard players operation @s state = #drone.GET_HIVE state
-				scoreboard players operation @s pollen += #space v
-				data modify entity @s HasNectar set value true
-			}
-			tag @s remove this.drone
 		}
-		function drones:set_motion
+
+		execute if score @s state = #drone.<%resource%>.GOTO_TARGET state run {
+			execute if entity @e[type=marker,tag=gen.<%resource%>,distance=..1] run {
+				tag @s add this.drone
+				scoreboard players set #collected v 0
+				scoreboard players set #space v <%resource.length*2%>
+				scoreboard players operation #space v -= @s <%resource%>
+				execute as @e[type=marker,tag=gen.<%resource%>,distance=..1,limit=1] run {
+					execute if score @s <%resource%> >= #space v run {
+						scoreboard players operation @s <%resource%> -= #space v
+						# say Collected <%resource%>!
+						scoreboard players set #collected v 1
+					}
+				}
+				# If no resources were collected, find another resource node.
+				execute if score #collected v matches 0 run scoreboard players operation @s state = #drone.CHOOSE_RESOURCE state
+				execute if score #collected v matches 1 run {
+					scoreboard players operation @s state = #drone.GET_HIVE state
+					scoreboard players operation @s <%resource%> += #space v
+					data modify entity @s HasNectar set value true
+				}
+				tag @s remove this.drone
+			}
+			function drones:set_motion
+		}
 	}
 
 	execute if score @s state = #drone.GET_HIVE state run {

@@ -18,7 +18,7 @@ LOOP(['a','b'],team) {
 		function summon_drone {
 			execute at @e[type=marker,tag=hive,tag=team_<%team%>] run {
 				function drones:summon
-				team join <%team%> @e[type=bee,tag=drone,distance=..1]
+				team join <%team%> @e[type=bee,tag=drone,distance=..2]
 			}
 		}
 	}
