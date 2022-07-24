@@ -1,9 +1,5 @@
 import log.mcm
 
-function load {
-	scoreboard objectives add gen_timer dummy
-}
-
 function summon {
 	execute align xyz positioned ~.5 ~ ~.5 run summon marker ~ ~ ~ {Tags:['gen.pollen','new']}
 	execute as @e[type=marker,tag=gen.pollen,limit=1,distance=..2,tag=new] at @s run {
@@ -34,18 +30,18 @@ clock 5t {
 		execute if score @s cap matches 100.. run function pollen_gen:captured_by_a
 		execute if score @s cap matches ..-100 run function pollen_gen:captured_by_b
 
-		scoreboard players operation #pollen v = @s pollen
-		execute if score @s pollen matches 1.. as @e[type=bee,dx=0,dy=0,dz=0,scores={pollen=..9}] run {
-			scoreboard players set #count v 10
-			scoreboard players operation #count v -= @s pollen
-			execute if score #pollen v >= #count v run {
-				scoreboard players operation #pollen v -= #count v
-				scoreboard players set @s pollen 10
-				data modify entity @s HasNectar set value true
-				tellraw @a ["", {"text":"Gathered "}, {"score":{"name":"#count","objective":"v"}}, {"text":" pollen!"}]
-			}
-		}
-		execute unless score #pollen v = @s pollen run scoreboard players operation @s pollen = #pollen v
+		# scoreboard players operation #pollen v = @s pollen
+		# execute if score @s pollen matches 1.. as @e[type=bee,dx=0,dy=0,dz=0,scores={pollen=..9}] run {
+		# 	scoreboard players set #count v 10
+		# 	scoreboard players operation #count v -= @s pollen
+		# 	execute if score #pollen v >= #count v run {
+		# 		scoreboard players operation #pollen v -= #count v
+		# 		scoreboard players set @s pollen 10
+		# 		data modify entity @s HasNectar set value true
+		# 		tellraw @a ["", {"text":"Gathered "}, {"score":{"name":"#count","objective":"v"}}, {"text":" pollen!"}]
+		# 	}
+		# }
+		# execute unless score #pollen v = @s pollen run scoreboard players operation @s pollen = #pollen v
 
 		LOOP(['a','b'], team) {
 			execute if entity @s[tag=captured_by_<%team%>, scores={pollen=..100}] run {
