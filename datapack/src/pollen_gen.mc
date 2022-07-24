@@ -10,9 +10,9 @@ function summon {
 		tag @s remove new
 	}
 }
+
 clock 5t {
 	execute as @e[type=marker,tag=gen.pollen] at @s run {
-
 		tag @s add this.gen
 		scoreboard players operation #old_cap v = @s cap
 		execute if entity @s[tag=!captured_by_a] as @a[distance=..3,team=a] run function pollen_gen:cap_a
