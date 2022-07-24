@@ -17,3 +17,10 @@ function load {
 
 	tellraw @a {"text":"Reloaded!"}
 }
+
+function reset {
+	kill @e[type=marker,tag=drone_target]
+	execute positioned -2 26 -172 run function targets:summon_hive
+
+	execute positioned -44 29 -187 run function targets:summon_wax
+}
