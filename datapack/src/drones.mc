@@ -69,11 +69,11 @@ function state_tick {
 	execute if score @s state = #drone.CHOOSE_RESOURCE state run {
 		execute (if entity @e[type=marker,tag=gen.wax,scores={wax=1..}]) {
 			scoreboard players operation @s state = #drone.wax.GET_TARGET state
-			# say Collecting wax
+			say Collecting wax
 
 		} else execute (if entity @e[type=marker,tag=gen.pollen,scores={pollen=10..}]) {
 			scoreboard players operation @s state = #drone.pollen.GET_TARGET state
-			# say Collecting pollen
+			say Collecting pollen
 
 		} else {
 			# If there is no pollen or wax currently in stock, and this bee has cargo, return to the hive.
@@ -104,7 +104,7 @@ function state_tick {
 			execute as @e[type=marker,tag=gen.pollen,distance=..1,limit=1] run {
 				execute if score @s pollen >= #space v run {
 					scoreboard players operation @s pollen -= #space v
-					# say Collected pollen!
+					say Collected pollen!
 					scoreboard players set #collected v 1
 				}
 			}
@@ -127,17 +127,17 @@ function state_tick {
 			}
 			scoreboard players operation @s target = #target v
 			scoreboard players operation @s state = #drone.GOTO_HIVE state
-			# say Returning to hive!
+			say Returning to hive!
 		} else {
 			# If no target was found, then yell about it
-			# say No hive found!
+			say No hive found!
 		}
 	}
 
 	execute if score @s state = #drone.GOTO_HIVE state run {
 		scoreboard players set #deposited v 0
 		execute if entity @e[type=marker,tag=hive,distance=..1] run {
-			# say Deposited resources!
+			say Deposited resources!
 			scoreboard players set #deposited v 1
 		}
 		execute if score #deposited v matches 1 run {
@@ -169,9 +169,12 @@ function set_motion {
 	scoreboard players operation #this.motion.x v += #direction.x v
 	scoreboard players operation #this.motion.y v += #direction.y v
 	scoreboard players operation #this.motion.z v += #direction.z v
+	execute at @s rotated ~ 0 unless block ^ ^ ^1 air run scoreboard players add #this.motion.y v 20
 	scoreboard players operation @s motion.x = #this.motion.x v
 	scoreboard players operation @s motion.y = #this.motion.y v
 	scoreboard players operation @s motion.z = #this.motion.z v
+	# title @a actionbar ["","x:",{"score":{"name":"#this.pos.x","objective":"v"}}," y:",{"score":{"name":"#this.pos.y","objective":"v"}}," z:",{"score":{"name":"#this.pos.z","objective":"v"}}]
+	# title @a actionbar ["","x:",{"score":{"name":"#this.motion.x","objective":"v"}}," y:",{"score":{"name":"#this.motion.y","objective":"v"}}," z:",{"score":{"name":"#this.motion.z","objective":"v"}}]
 }
 
 function apply_motion {
