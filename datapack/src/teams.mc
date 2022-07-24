@@ -6,11 +6,16 @@ function load {
 	team modify b color yellow
 }
 
-function join_a {
-	team join a @s
+LOOP(['a','b'],team) {
+	dir <%team%> {
+		function join {
+			team join <%team%> @s
+		}
+		function summon_drone {
+			execute positioned as @e[type=marker,tag=hive,team=<%team%>] run {
+				function drones:summon
+				team join <%team%> @e[type=bee,tag=drone,limit=1,distance=..1,team=]
+			}
+		}
+	}
 }
-
-function join_b {
-	team join b @s
-}
-

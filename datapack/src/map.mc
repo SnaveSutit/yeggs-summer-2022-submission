@@ -19,8 +19,37 @@ function load {
 }
 
 function reset {
+	kill @e[type=marker,tag=hive]
 	kill @e[type=marker,tag=drone_target]
-	execute positioned -2 26 -172 run function targets:summon_hive
+	kill @e[type=marker,tag=gen.pollen]
+	kill @e[type=marker,tag=gen.wax]
+	execute positioned -2 26 -172 run {
+		function targets:summon_hive
+		team join a @e[type=marker,tag=hive,distance=..1,team=]
+	}
+	execute positioned -4 26 -278 run {
+		function targets:summon_hive
+		team join b @e[type=marker,tag=hive,distance=..1,team=]
+	}
+
+	execute positioned -36 29 -225 run {
+		function targets:summon_pollen
+		function pollen_gen:summon
+	}
+	execute positioned 30 29 -225 run {
+		function targets:summon_pollen
+		function pollen_gen:summon
+	}
+	execute positioned 33 21 -188 run {
+		function targets:summon_pollen
+		function pollen_gen:summon
+	}
+	execute positioned -37 21 -262 run {
+		function targets:summon_pollen
+		function pollen_gen:summon
+	}
 
 	execute positioned -44 29 -187 run function targets:summon_wax
+	execute positioned -3 26 -224 run function targets:summon_wax
+	execute positioned 40 29 -263 run function targets:summon_wax
 }

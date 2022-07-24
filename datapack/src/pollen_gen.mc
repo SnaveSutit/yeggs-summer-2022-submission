@@ -5,7 +5,7 @@ function load {
 }
 
 function summon {
-	execute align xyz positioned ~.5 ~ ~.5 run summon marker ~ ~ ~ {Tags:['gen.pollen','new']}
+	execute align xyz positioned ~.5 ~.5 ~.5 run summon marker ~ ~ ~ {Tags:['gen.pollen','new']}
 	execute as @e[type=marker,tag=gen.pollen,limit=1,distance=..2,tag=new] at @s run {
 		execute store result score @s id run scoreboard players add last.id v 1
 		scoreboard players set @s cap 0

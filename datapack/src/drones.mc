@@ -8,7 +8,7 @@ function load {
 }
 
 function summon {
-	summon bee ~ ~ ~ {Tags:['drone','new'], PersistenceRequired:1b,NoAI:false,Health:20f,Attributes:[{Name:generic.max_health,Base:20}]}
+	summon bee ~ ~ ~ {Tags:['drone','new'],PersistenceRequired:1b,NoAI:false,Health:20f,Attributes:[{Name:generic.max_health,Base:20}],CustomName:'Drone',CustomNameVisible:1b}
 	execute as @e[type=bee,tag=new,distance=..1,limit=1] at @s run {
 		execute store result score @s id run scoreboard players add last.id i 1
 		scoreboard players set @s pollen 0
@@ -27,31 +27,31 @@ clock 2t {
 			# scoreboard players operation #this.motion.z v /= 2 v
 			# function math:this/set/motion
 
-		execute if score @s pollen matches 10.. if entity @e[type=marker,tag=hive,dx=0,dy=0,dz=0] run {
-			scoreboard players set @s pollen 0
-			data modify entity @s HasNectar set value false
-			tellraw @a {"text":"Deposited 10 pollen!"}
-		}
+			execute if score @s pollen matches 10.. if entity @e[type=marker,tag=hive,dx=0,dy=0,dz=0] run {
+				scoreboard players set @s pollen 0
+				data modify entity @s HasNectar set value false
+				tellraw @a {"text":"Deposited 10 pollen!"}
+			}
 
-		execute (if score @s target_cooldown matches 1..) {
-			scoreboard players remove @s target_cooldown 1
-		} else {
-			execute if score @s pollen matches 10.. run {
-				execute as @e[type=marker,tag=hive] run {
-					scoreboard players operation #hive v = @s id
-				}
-				scoreboard players operation @s target = #hive v
-			}
-			execute if score @s pollen matches ..9 run {
-				execute if entity @e[type=marker,tag=gen.pollen,scores={pollen=10..}] run {
-					execute as @e[type=marker,tag=gen.pollen,sort=random,scores={pollen=10..},limit=1] at @s as @e[type=marker,tag=drone_target,distance=..1,limit=1] run {
-						scoreboard players operation #pollen v = @s id
+			execute (if score @s target_cooldown matches 1..) {
+				scoreboard players remove @s target_cooldown 1
+			} else {
+				execute if score @s pollen matches 10.. run {
+					execute as @e[type=marker,tag=hive] run {
+						scoreboard players operation #hive v = @s id
 					}
-					scoreboard players operation @s target = #pollen v
+					scoreboard players operation @s target = #hive v
 				}
+				execute if score @s pollen matches ..9 run {
+					execute if entity @e[type=marker,tag=gen.pollen,scores={pollen=10..}] run {
+						execute as @e[type=marker,tag=gen.pollen,sort=random,scores={pollen=10..},limit=1] at @s as @e[type=marker,tag=drone_target,distance=..1,limit=1] run {
+							scoreboard players operation #pollen v = @s id
+						}
+						scoreboard players operation @s target = #pollen v
+					}
+				}
+				scoreboard players set @s target_cooldown 60
 			}
-			scoreboard players set @s target_cooldown 60
-		}
 
 		} else {
 			# Get the position of the target
