@@ -5,13 +5,15 @@ function load {
 	scoreboard objectives add id dummy
 	scoreboard objectives add cap dummy
 
+	scoreboard objectives add honey dummy
+
 	scoreboard objectives add gen_timer dummy
 
 	scoreboard objectives add state dummy
 	scoreboard objectives add wax dummy
 	scoreboard objectives add pollen dummy
 	scoreboard objectives add target dummy
-	scoreboard objectives add target_cooldown dummy
+	scoreboard objectives add idle_timer dummy
 	scoreboard objectives add path_timer dummy
 
 	scoreboard objectives add motion.x dummy

@@ -19,7 +19,7 @@ function summon {
 		scoreboard players set @s wax 0
 		scoreboard players set @s pollen 0
 		scoreboard players set @s target -1
-		scoreboard players set @s target_cooldown 40
+		scoreboard players set @s idle_timer 20
 		tag @s remove new
 	}
 }
@@ -54,7 +54,11 @@ clock 2t {
 }
 
 clock 2t {
-	execute as @e[type=bee,tag=drone] at @s run function drones:update_rotation
+	execute as @e[type=bee,tag=drone] at @s run {
+		execute if score @s state = #drone.pollen.GOTO_TARGET state run function drones:update_rotation
+		execute if score @s state = #drone.wax.GOTO_TARGET state run function drones:update_rotation
+		execute if score @s state = #drone.GOTO_HIVE state run function drones:update_rotation
+	}
 }
 
 clock 1t {
@@ -67,22 +71,28 @@ clock 1t {
 
 function state_tick {
 	execute if score @s state = #drone.IDLE state run {
-		scoreboard players operation @s state = #drone.CHOOSE_RESOURCE state
+		scoreboard players remove @s idle_timer 1
+		execute if score @s idle_timer matches ..0 run scoreboard players operation @s state = #drone.CHOOSE_RESOURCE state
 	}
 
 	execute if score @s state = #drone.CHOOSE_RESOURCE state run {
 		execute (if entity @e[type=marker,tag=gen.wax,scores={wax=1..}]) {
 			scoreboard players operation @s state = #drone.wax.GET_TARGET state
-			say Collecting wax
+			# say Collecting wax
 
 		} else execute (if entity @e[type=marker,tag=gen.pollen,scores={pollen=10..}]) {
 			scoreboard players operation @s state = #drone.pollen.GET_TARGET state
-			say Collecting pollen
+			# say Collecting pollen
 
 		} else {
 			# If there is no pollen or wax currently in stock, and this bee has cargo, return to the hive.
 			execute if score @s wax matches 1.. run scoreboard players operation @s state = #drone.GET_HIVE state
 			execute if score @s pollen matches 1.. run scoreboard players operation @s state = #drone.GET_HIVE state
+			# Else, wander around a bit
+			execute if score @s wax matches 0 if score @s pollen matches 0 run {
+				scoreboard players set @s idle_timer 20
+				scoreboard players operation @s state = #drone.IDLE state
+			}
 		}
 	}
 
@@ -108,7 +118,7 @@ function state_tick {
 			execute as @e[type=marker,tag=gen.pollen,distance=..1,limit=1] run {
 				execute if score @s pollen >= #space v run {
 					scoreboard players operation @s pollen -= #space v
-					say Collected pollen!
+					# say Collected pollen!
 					scoreboard players set #collected v 1
 				}
 			}
@@ -126,12 +136,16 @@ function state_tick {
 
 	execute if score @s state = #drone.GET_HIVE state run {
 		execute (if entity @e[type=marker,tag=hive]) {
-			execute as @e[type=marker,tag=hive] at @s run {
-				scoreboard players operation #target v = @e[type=marker,tag=drone_target,tag=hive,distance=..1,limit=1] id
+			LOOP(['a','b'], team) {
+				execute if entity @s[team=<%team%>] run {
+					execute as @e[type=marker,tag=hive,tag=team_<%team%>] at @s run {
+						scoreboard players operation #target v = @e[type=marker,tag=drone_target,tag=hive,distance=..1,limit=1] id
+					}
+					scoreboard players operation @s target = #target v
+					scoreboard players operation @s state = #drone.GOTO_HIVE state
+				}
 			}
-			scoreboard players operation @s target = #target v
-			scoreboard players operation @s state = #drone.GOTO_HIVE state
-			say Returning to hive!
+			# say Returning to hive!
 		} else {
 			# If no target was found, then yell about it
 			say No hive found!
@@ -141,14 +155,18 @@ function state_tick {
 	execute if score @s state = #drone.GOTO_HIVE state run {
 		scoreboard players set #deposited v 0
 		execute if entity @e[type=marker,tag=hive,distance=..1] run {
-			say Deposited resources!
+			# say Deposited resources!
 			scoreboard players set #deposited v 1
 		}
 		execute if score #deposited v matches 1 run {
 			scoreboard players set @s wax 0
 			scoreboard players set @s pollen 0
+			scoreboard players set @s idle_timer 20
 			scoreboard players operation @s state = #drone.IDLE state
 			data modify entity @s HasNectar set value false
+			LOOP(['a','b'],team){
+				execute if entity @s[team=<%team%>] run scoreboard players add .team_<%team%> honey 1
+			}
 		}
 		function drones:set_motion
 	}
@@ -158,7 +176,6 @@ function update_rotation {
 	scoreboard players operation # v = @s target
 	tag @s add this.drone
 	execute as @e[type=marker,tag=drone_target] if score @s id = # v run {
-		function math:other/get/pos
 		tag @s add this.target
 		# tp @e[type=bee,tag=this.drone,distance=..1,limit=1] ~ ~ ~ facing entity @s feet
 		execute as @e[type=bee,tag=this.drone,distance=..1,limit=1] at @s anchored eyes facing entity @e[type=marker,tag=this.target] feet positioned ^ ^ ^0.5 rotated as @s positioned ^ ^ ^1 facing entity @s eyes facing ^ ^ ^-1 positioned as @s rotated ~ 0 run tp @s ~ ~ ~ ~ ~
@@ -169,6 +186,10 @@ function update_rotation {
 
 function set_motion {
 	function math:this/get/pos
+	scoreboard players operation # v = @s target
+	tag @s add this.drone
+	execute as @e[type=marker,tag=drone_target] if score @s id = # v run function math:other/get/pos
+	tag @s remove this.drone
 	function math:get/direction_this_to_other
 	function math:this/get/motion
 	scoreboard players operation #direction.x v /= 30 v
@@ -178,14 +199,14 @@ function set_motion {
 	scoreboard players operation #this.motion.y v += #direction.y v
 	scoreboard players operation #this.motion.z v += #direction.z v
 
-	execute at @s rotated ~ 0 unless block ^ ^ ^1 air run scoreboard players add #this.motion.y v 10
+	execute at @s rotated ~ 0 unless block ^ ^ ^10 air run scoreboard players add #this.motion.y v 10
 	execute at @s rotated ~ 0 unless block ~ ~-2 ~ air run scoreboard players add #this.motion.y v 10
 
 	scoreboard players operation @s motion.x = #this.motion.x v
 	scoreboard players operation @s motion.y = #this.motion.y v
 	scoreboard players operation @s motion.z = #this.motion.z v
 	# title @a actionbar ["","x:",{"score":{"name":"#this.pos.x","objective":"v"}}," y:",{"score":{"name":"#this.pos.y","objective":"v"}}," z:",{"score":{"name":"#this.pos.z","objective":"v"}}]
-	title @a actionbar ["","x:",{"score":{"name":"#this.motion.x","objective":"v"}}," y:",{"score":{"name":"#this.motion.y","objective":"v"}}," z:",{"score":{"name":"#this.motion.z","objective":"v"}}]
+	# title @a actionbar ["","x:",{"score":{"name":"#this.motion.x","objective":"v"}}," y:",{"score":{"name":"#this.motion.y","objective":"v"}}," z:",{"score":{"name":"#this.motion.z","objective":"v"}}]
 }
 
 function apply_motion {
