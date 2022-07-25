@@ -76,7 +76,7 @@ function reset {
 		function targets:summon_pollen
 		function gen:pollen/summon
 	}
-	execute positioned -37 21 -262 run {
+	execute positioned -36 21 -262 run {
 		function targets:summon_pollen
 		function gen:pollen/summon
 	}
