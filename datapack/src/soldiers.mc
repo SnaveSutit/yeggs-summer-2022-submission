@@ -74,6 +74,12 @@ function state_tick {
 				# say Damaged enemy hive!
 				kill @s
 				tp @s ~ -2000 ~
+				playsound minecraft:entity.zombie.attack_wooden_door block @a[team=<%team==='a'?'b':'a'%>] ~ ~ ~ 100 2
+				playsound minecraft:entity.zombie.attack_wooden_door block @a[team=!<%team==='a'?'b':'a'%>] ~ ~ ~ 3 2
+				execute at @e[type=marker,tag=hive,limit=1,distance=..1] run {
+					particle item beehive ~ ~-1 ~ 0 0 0 0.5 200 force
+					particle minecraft:damage_indicator ~ ~-1 ~ 0 0 0 0.5 10 force
+				}
 				scoreboard players remove .team_<%team==='a'?'b':'a'%> health 1
 			}
 		}

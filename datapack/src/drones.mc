@@ -150,6 +150,7 @@ function state_tick {
 					execute if score @s <%resource%> >= #space v run {
 						scoreboard players operation @s <%resource%> -= #space v
 						# say Collected <%resource%>!
+						function gen:<%resource%>/update_name
 						scoreboard players set #collected v 1
 					}
 				}
@@ -199,7 +200,7 @@ function state_tick {
 		execute if score #deposited v matches 1 run {
 			LOOP(['a','b'],team){
 				execute if entity @s[team=<%team%>] run {
-					execute if score @s pollen matches 1.. run scoreboard players add .team_<%team%> honey 1
+					execute if score @s pollen matches 1.. run scoreboard players add .team_<%team%> honey 5
 					execute if score @s wax matches 1.. run scoreboard players add .team_<%team%> wax 1
 				}
 			}

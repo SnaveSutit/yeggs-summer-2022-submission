@@ -62,9 +62,11 @@ function reset {
 	kill @e[type=marker,tag=hive]
 	kill @e[type=marker,tag=drone_target]
 	kill @e[type=marker,tag=gen.pollen]
-	kill @e[type=armor_stand,tag=gen.pollen.ring]
 	kill @e[type=marker,tag=gen.wax]
+	kill @e[type=armor_stand,tag=gen.pollen.ring]
 	kill @e[type=armor_stand,tag=gen.wax.ring]
+	kill @e[type=area_effect_cloud,tag=gen.pollen.name]
+	kill @e[type=area_effect_cloud,tag=gen.wax.name]
 
 	execute positioned -2 26 -172 run {
 		function targets:summon_hive
@@ -160,6 +162,8 @@ function reset {
 	clear @a
 	effect give @a minecraft:regeneration 1 255 true
 	effect give @a minecraft:saturation 1 20 true
+
+	scoreboard players set #endgame v 0
 }
 
 function tick {
@@ -168,6 +172,29 @@ function tick {
 		scoreboard players operation [Wax] display_<%team%> = .team_<%team%> wax
 		scoreboard players operation [Drones] display_<%team%> = .team_<%team%> drones
 		scoreboard players operation [Soldiers] display_<%team%> = .team_<%team%> soldiers
+
+		LOOP(['honey','wax'],resource) {
+			scoreboard players add #<%team%>_warning_cooldown v 0
+			execute if score #<%team%>_warning_cooldown v matches 1.. run scoreboard players remove #<%team%>_warning_cooldown v 1
+			execute if score #<%team%>_warning_cooldown v matches 0 if score .team_<%team%> <%resource%> > #<%team%>.hive.max_<%resource%> v run {
+				scoreboard players operation .team_<%team%> <%resource%> = #<%team%>.hive.max_<%resource%> v
+				tellraw @a[team=<%team%>] {"text":"Your hive has reached its maximum <%resource.charAt(0).toUpperCase()+resource.slice(1)%> capacity! Spend some <%resource.charAt(0).toUpperCase()+resource.slice(1)%> or upgrade your hive to collect more!","color":"red"}
+				playsound minecraft:block.note_block.pling block @a[team=<%team%>] ~ ~ ~ 10000 1
+				scoreboard players set #<%team%>_warning_cooldown v 600
+			}
+		}
+
+		execute if score #running v matches 1 if score .team_<%team==='a'?'b':'a'%> health matches ..0 run {
+			scoreboard players set #running v 0
+			scoreboard players set #endgame v 400
+			title @a times 20 360 20
+			title @a title [{"text":"<%team==='a'?'Red':'Blue'%> Team wins!","color":"<%team==='a'?'red':'blue'%>"}]
+			scoreboard players set #winning_team v <%team==='a'?1:2%>
+		}
+		execute if score #endgame v matches 1.. if score #winning_team v matches <%team==='a'?1:2%> run {
+			scoreboard players remove #endgame v 1
+			execute if score #endgame v matches 0 run function map:reset
+		}
 
 		execute if score #<%team%>.attacking v matches 0 if score .team_<%team%> soldiers matches 20.. run {
 			scoreboard players operation #target v = @e[type=marker,tag=drone_target,tag=hive,limit=1,tag=!team_<%team%>] id

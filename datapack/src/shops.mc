@@ -39,7 +39,7 @@ dir kits {
 					{Slot:6b,Count:1b,id:"minecraft:player_head",tag:{shop_item:1b,kits_shop:1b,beefender_class:1b,display:{
 						Name:'{"text":"Beefender","color":"yellow","italic":false}',
 						Lore:[
-							'{"text":"Tank class.","color":"light_purple","italic":false}',
+							'{"text":"Tank class","color":"light_purple","italic":false}',
 							'{"text":"Defend the queen with your mighty shield!","color":"gray"}',
 							'{"text":"Swap cost: 30 Honey","color":"gold","italic":false}'
 							]
@@ -244,12 +244,18 @@ dir upgrades {
 							}
 
 							execute if score #new_drone v matches 1 if score .team_<%team%> honey >= #<%team%>.new_drone.honey_cost v run {
-								tellraw @a[team=<%team%>] ["",{"text":"["},{"selector":"@s"},{"text":"]"},[{"text":" Purchased a ","color":"green"},{"text":"Drone","color":"gold"}," for ",{"score": {"name": "#<%team%>.new_drone.honey_cost","objective": "v"},"color":"yellow"},{"text":" Honey","color":"yellow"}]]
-								scoreboard players operation .team_<%team%> honey -= #<%team%>.new_drone.honey_cost v
-								function teams:<%team%>/summon_drone
 
-								function map:update_scores
-								scoreboard players set #purchase_success v 1
+								execute (if score .team_<%team%> drones >= #<%team%>.hive.max_bees v) {
+									scoreboard players set #purchase_success v 3
+								} else {
+									tellraw @a[team=<%team%>] ["",{"text":"["},{"selector":"@s"},{"text":"]"},[{"text":" Purchased a ","color":"green"},{"text":"Drone","color":"gold"}," for ",{"score": {"name": "#<%team%>.new_drone.honey_cost","objective": "v"},"color":"yellow"},{"text":" Honey","color":"yellow"}]]
+									scoreboard players operation .team_<%team%> honey -= #<%team%>.new_drone.honey_cost v
+									function teams:<%team%>/summon_drone
+
+									function map:update_scores
+									scoreboard players set #purchase_success v 1
+								}
+
 							}
 
 							execute if score #new_soldier v matches 1 if score .team_<%team%> honey >= #<%team%>.new_soldier.honey_cost v if score .team_<%team%> wax >= #<%team%>.new_soldier.wax_cost v run {
@@ -276,6 +282,10 @@ dir upgrades {
 							}
 							execute if score #purchase_success v matches 2 run {
 								tellraw @s [{"text":"You already have the maximum number of Soldiers in your swarm!","color":"red"}]
+								playsound minecraft:entity.villager.no player @s ~ ~ ~ 1 1
+							}
+							execute if score #purchase_success v matches 3 run {
+								tellraw @s [{"text":"You already have the maximum number of Drones! Upgrade your hive to get more.","color":"red"}]
 								playsound minecraft:entity.villager.no player @s ~ ~ ~ 1 1
 							}
 						}

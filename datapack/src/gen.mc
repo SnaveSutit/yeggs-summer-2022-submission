@@ -12,6 +12,13 @@ LOOP(['pollen','wax'],resource){
 				!IF(resource === 'wax'){
 					summon armor_stand ~ ~-1.5 ~ {Tags:['gen.<%resource%>.ring','new'],Invisible:1b,Marker:true,NoGravity:1b,Invulnerable:1b,ArmorItems:[{},{},{},{id:"minecraft:leather_horse_armor",Count:1b,tag:{CustomModelData:1,display:{color:16777215}}}]}
 				}
+
+				# summon area_effect_cloud ~ ~ ~ {Tags:['gen.<%resource%>.name'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomNameVisible:1b,CustomName:'[{"text":"[","color":"white"},{"text":"0","color":"yellow"},{"text":" <%resource.charAt(0).toUpperCase()+resource.slice(1)%>","color":"yellow"},"]"]'}
+				summon area_effect_cloud ~3 ~-1 ~ {Tags:['gen.<%resource%>.name'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomNameVisible:1b,CustomName:'[{"text":"[","color":"white"},{"text":"0","color":"yellow"},{"text":" <%resource.charAt(0).toUpperCase()+resource.slice(1)%>","color":"yellow"},"]"]'}
+				summon area_effect_cloud ~-3 ~-1 ~ {Tags:['gen.<%resource%>.name'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomNameVisible:1b,CustomName:'[{"text":"[","color":"white"},{"text":"0","color":"yellow"},{"text":" <%resource.charAt(0).toUpperCase()+resource.slice(1)%>","color":"yellow"},"]"]'}
+				summon area_effect_cloud ~ ~-1 ~3 {Tags:['gen.<%resource%>.name'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomNameVisible:1b,CustomName:'[{"text":"[","color":"white"},{"text":"0","color":"yellow"},{"text":" <%resource.charAt(0).toUpperCase()+resource.slice(1)%>","color":"yellow"},"]"]'}
+				summon area_effect_cloud ~ ~-1 ~-3 {Tags:['gen.<%resource%>.name'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomNameVisible:1b,CustomName:'[{"text":"[","color":"white"},{"text":"0","color":"yellow"},{"text":" <%resource.charAt(0).toUpperCase()+resource.slice(1)%>","color":"yellow"},"]"]'}
+
 				scoreboard players set @s cap 0
 				scoreboard players set @s <%resource%> 0
 				scoreboard players set @s gen_timer 0
@@ -61,12 +68,13 @@ LOOP(['pollen','wax'],resource){
 				LOOP(['a','b'], team) {
 					execute if entity @s[tag=captured_by_<%team%>, scores={<%resource%>=..50}] run {
 						scoreboard players add @s gen_timer 1
-						execute if score @s gen_timer >= #<%team%>.<%resource%>_gen.speed v run {
+						execute if score @s gen_timer > #<%team%>.<%resource%>_gen.speed v run {
 							playsound minecraft:block.big_dripleaf.tilt_up block @a ~ ~ ~ 1 1
 							particle minecraft:falling_nectar ~ ~2 ~ 2 0.5 2 0 20 force @a
 							scoreboard players set @s gen_timer 0
 							scoreboard players operation @s <%resource%> += #<%team%>.<%resource%>_gen.amount v
 						}
+						function gen:<%resource%>/update_name
 					}
 				}
 				tag @s remove this.gen
@@ -86,6 +94,14 @@ LOOP(['pollen','wax'],resource){
 		# 		%%>
 		# 	}
 		# }
+
+		function update_name {
+			tag @s add this.gen
+			setblock 0 10 0 air
+			setblock 0 10 0 oak_sign{Text1:'[{"text":"[","color":"white"},{"score":{"name":"@e[type=marker,tag=this.gen]","objective":"<%resource%>"},"color":"yellow"},{"text":" <%resource.charAt(0).toUpperCase()+resource.slice(1)%>","color":"yellow"},"]"]'}
+			execute as @e[type=area_effect_cloud,distance=..10,tag=gen.<%resource%>.name] run data modify entity @s CustomName set from block 0 10 0 Text1
+			tag @s remove this.gen
+		}
 
 		function captured_by_a {
 			tag @s add captured_by_a
