@@ -4,6 +4,8 @@ function load {
 	team modify a color red
 	team add b {"text":"Blue","color":"blue"}
 	team modify b color blue
+	team add spectator {"text":"Spectator","color":"dark_gray"}
+	team modify spectator color dark_gray
 
 	bossbar add swarm_a ["",{"text":"Red Swarm","color":"red"}]
 	bossbar set minecraft:swarm_a color red
@@ -18,6 +20,7 @@ function load {
 	LOOP(['a','b'],team) {
 		bossbar set minecraft:swarm_<%team%> max 20
 		bossbar set minecraft:hive_<%team%> max 60
+		bossbar set minecraft:swarm_<%team%> style notched_20
 
 		team modify <%team%> friendlyFire false
 		team modify <%team%> seeFriendlyInvisibles false

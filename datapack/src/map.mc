@@ -14,8 +14,6 @@ function load {
 
 	scoreboard objectives add display_a dummy ["",{"text":"Team","color":"white"}," ",{"text":"Red","color":"red"}]
 	scoreboard objectives add display_b dummy ["",{"text":"Team","color":"white"}," ",{"text":"Blue","color":"blue"}]
-	scoreboard objectives setdisplay sidebar.team.red display_a
-	scoreboard objectives setdisplay sidebar.team.blue display_b
 	LOOP(['a','b'],team){
 		scoreboard players set [Honey] display_<%team%> 0
 		scoreboard players set [Wax] display_<%team%> 0
@@ -48,6 +46,12 @@ function load {
 	scoreboard players set -1 v -1
 
 	scoreboard players set last.id v 0
+
+	gamerule naturalRegeneration true
+	gamerule fallDamage true
+	gamerule drowningDamage true
+	gamerule keepInventory true
+	gamerule fireDamage true
 
 	tellraw @a {"text":"Reloaded!"}
 }
@@ -139,6 +143,23 @@ function reset {
 
 	scoreboard players set #running v 0
 	function upgrades:reset
+	setworldspawn -66 45 -294 0
+	spawnpoint @a -66 45 -294 0
+
+	scoreboard objectives setdisplay sidebar.team.red
+	scoreboard objectives setdisplay sidebar.team.blue
+
+	tp @a[tag=!Admin] -66 45 -294 0 0
+	gamemode adventure @a[tag=!Admin]
+
+	setblock -67 45 -292 minecraft:crimson_button
+
+	kill @e[type=area_effect_cloud,tag=start_button]
+	summon area_effect_cloud -67 45 -291.1 {Tags:['start_button'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomName:'{"text":"Start map!"}',CustomNameVisible:1b}
+
+	clear @a
+	effect give @a minecraft:regeneration 1 255 true
+	effect give @a minecraft:saturation 1 20 true
 }
 
 function tick {
@@ -160,6 +181,29 @@ function tick {
 			scoreboard players set #<%team%>.attacking v 0
 		}
 	}
+
+	execute if block -67 45 -292 minecraft:crimson_button[powered=true] run function map:start
+}
+
+clock 10t {
+	execute as @a[x=-69,y=48,z=-300, dx=2,dy=-3,dz=-2,team=!a] run {
+		team join a @s
+		title @s times 10 20 10
+		title @s title [{"text":"Joined Red Team!","color":"red"}]
+		playsound minecraft:block.respawn_anchor.charge player @s ~ ~ ~ 100 2
+	}
+	execute as @a[x=-66,y=48,z=-300, dx=3,dy=-3,dz=-2,team=!b] run {
+		team join b @s
+		title @s times 10 20 10
+		title @s title [{"text":"Joined Blue Team!","color":"blue"}]
+		playsound minecraft:block.respawn_anchor.charge player @s ~ ~ ~ 100 2
+	}
+	execute as @a[x=-74,y=48,z=-294, dx=-3,dy=-3,dz=-3,team=!spectator] run {
+		team join spectator @s
+		title @s times 10 20 10
+		title @s title [{"text":"Joined Spectators!","color":"gray"}]
+		playsound minecraft:block.respawn_anchor.charge player @s ~ ~ ~ 100 2
+	}
 }
 
 clock 1s {
@@ -167,12 +211,34 @@ clock 1s {
 	LOOP(['a','b'],team){
 		execute store result score .team_<%team%> drones if entity @e[type=bee,tag=drone,team=<%team%>]
 		execute store result score .team_<%team%> soldiers if entity @e[type=bee,tag=soldier,team=<%team%>]
+		execute store result bossbar minecraft:hive_<%team%> value run scoreboard players get .team_<%team%> health
 		execute store result bossbar minecraft:swarm_<%team%> value run scoreboard players get .team_<%team%> soldiers
+		execute if score #running v matches 1 if score .team_<%team%> drones matches 0 run {
+			function teams:<%team%>/summon_drone
+		}
 	}
 }
 
 function start {
 	scoreboard players set #running v 1
+	gamemode adventure @a[team=!spectator,tag=!Admin]
+	gamemode spectator @a[team=spectator]
+	spawnpoint @a[team=a] -2 26 -172 0
+	tp @a[team=a] -2 26 -172 0 0
+	spawnpoint @a[team=b] -4 26 -278 0
+	tp @a[team=b] -4 26 -278 0 0
+	tp @a[team=spectator] -3 28 -225
+
+	scoreboard objectives setdisplay sidebar.team.red display_a
+	scoreboard objectives setdisplay sidebar.team.blue display_b
+
+	kill @e[type=area_effect_cloud,tag=start_button]
+	setblock -67 45 -292 air
+	execute as @a run function kits:chambeeion
+	LOOP(5,i){
+		function teams:a/summon_drone
+		function teams:b/summon_drone
+	}
 }
 
 clock 6s {
