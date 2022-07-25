@@ -4,6 +4,7 @@ function load {
 	scoreboard objectives add v dummy
 	scoreboard objectives add id dummy
 	scoreboard objectives add cap dummy
+	scoreboard objectives add timer dummy
 
 	scoreboard objectives add honey dummy
 
@@ -50,7 +51,9 @@ function reset {
 	kill @e[type=marker,tag=hive]
 	kill @e[type=marker,tag=drone_target]
 	kill @e[type=marker,tag=gen.pollen]
+	kill @e[type=armor_stand,tag=gen.pollen.ring]
 	kill @e[type=marker,tag=gen.wax]
+	kill @e[type=armor_stand,tag=gen.wax.ring]
 
 	execute positioned -2 26 -172 run {
 		function targets:summon_hive
@@ -69,7 +72,7 @@ function reset {
 		function targets:summon_pollen
 		function pollen_gen:summon
 	}
-	execute positioned 33 21 -188 run {
+	execute positioned 31 21 -188 run {
 		function targets:summon_pollen
 		function pollen_gen:summon
 	}

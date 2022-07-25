@@ -1,9 +1,10 @@
 import log.mcm
 
 function summon {
-	execute align xyz positioned ~.5 ~ ~.5 run summon marker ~ ~ ~ {Tags:['gen.pollen','new']}
+	execute align xyz positioned ~.5 ~.5 ~.5 run summon marker ~ ~ ~ {Tags:['gen.pollen','new']}
 	execute as @e[type=marker,tag=gen.pollen,limit=1,distance=..2,tag=new] at @s run {
 		execute store result score @s id run scoreboard players add last.id v 1
+		summon armor_stand ~ ~-1.5 ~ {Tags:['gen.pollen.ring','new'],Invisible:1b,Marker:false,NoGravity:1b,Invulnerable:1b,ArmorItems:[{},{},{},{id:"minecraft:white_dye",Count:1b}]}
 		scoreboard players set @s cap 0
 		scoreboard players set @s pollen 0
 		scoreboard players set @s gen_timer 0
@@ -11,12 +12,20 @@ function summon {
 	}
 }
 
+clock 1t {
+	execute as @e[type=armor_stand,tag=gen.pollen.ring] at @s run {
+		LOOP(200,i) {
+			execute if score @s cap matches <%i-100%> run tp @s ~ ~ ~ ~<%(i-100)/4%> ~
+		}
+	}
+}
+
 clock 5t {
-	execute as @e[type=marker,tag=gen.pollen] at @s run {
+	execute as @e[type=marker,tag=gen.pollen] at @s positioned ~ ~-1.5 ~ run {
 		tag @s add this.gen
 		scoreboard players operation #old_cap v = @s cap
-		execute if entity @s[tag=!captured_by_a] as @a[distance=..3,team=a] run function pollen_gen:cap_a
-		execute if entity @s[tag=!captured_by_b] as @a[distance=..3,team=b] run function pollen_gen:cap_b
+		execute if entity @s[tag=!captured_by_a] as @a[distance=..5,team=a] run function pollen_gen:cap_a
+		execute if entity @s[tag=!captured_by_b] as @a[distance=..5,team=b] run function pollen_gen:cap_b
 
 		execute (if score #old_cap v = @s cap) {
 			execute if score @s cap matches 1.. run scoreboard players remove @s cap 1
@@ -26,6 +35,9 @@ clock 5t {
 		} else {
 			function pollen_gen:layered_charging_audio
 		}
+
+		scoreboard players operation #cap v = @s cap
+		execute as @e[type=armor_stand,tag=gen.pollen.ring,distance=..3,limit=1] run scoreboard players operation @s cap = #cap v
 
 		execute if score @s cap matches 100.. run function pollen_gen:captured_by_a
 		execute if score @s cap matches ..-100 run function pollen_gen:captured_by_b
@@ -59,6 +71,21 @@ clock 5t {
 	}
 
 }
+
+# function pulse {
+# 	<%%config.storage.r = 5%%>
+# 	<%%config.storage.points = 100%%>
+# 	LOOP(config.storage.points, i) {
+# 		<%%
+# 			let theta = (2 * Math.PI) / config.storage.points
+# 			let angle = (theta * i)
+# 			let x = Math.round(config.storage.r*Math.cos(angle) * 1000)/1000
+# 			let z = Math.round(config.storage.r*Math.sin(angle) * 1000)/1000
+# 			emit(`particle minecraft:end_rod ~ ~-1.3 ~ ${x/10} ${((Math.sin(i)*0.1))/10} ${z/10} 1 0 force`)
+# 		%%>
+# 	}
+# }
+
 function captured_by_a {
 	tag @s add captured_by_a
 	tag @s remove captured_by_b

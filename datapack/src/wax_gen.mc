@@ -1,7 +1,7 @@
 import log.mcm
 
 function summon {
-	execute align xyz positioned ~.5 ~ ~.5 run summon marker ~ ~ ~ {Tags:['gen.wax','new']}
+	execute align xyz positioned ~.5 ~.5 ~.5 run summon marker ~ ~ ~ {Tags:['gen.wax','new']}
 	execute as @e[type=marker,tag=gen.wax,limit=1,distance=..2,tag=new] at @s run {
 		execute store result score @s id run scoreboard players add last.id v 1
 		scoreboard players set @s cap 0
@@ -12,7 +12,7 @@ function summon {
 }
 
 clock 5t {
-	execute as @e[type=marker,tag=gen.wax] at @s run {
+	execute as @e[type=marker,tag=gen.wax] at @s positioned ~ ~-1.5 ~ run {
 		tag @s add this.gen
 		scoreboard players operation #old_cap v = @s cap
 		execute if entity @s[tag=!captured_by_a] as @a[distance=..3,team=a] run function wax_gen:cap_a

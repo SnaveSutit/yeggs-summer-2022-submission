@@ -16,5 +16,9 @@
 - Add kit select system
 - Add wax generators
 
+# BUGS
+- Figure out why drones aren't targeting specifically one team's captured points
+
+
 # IDEAS
 - Player's armor should be bee themed
