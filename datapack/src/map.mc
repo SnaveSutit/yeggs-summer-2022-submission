@@ -66,24 +66,33 @@ function reset {
 
 	execute positioned -36 29 -225 run {
 		function targets:summon_pollen
-		function pollen_gen:summon
+		function gen:pollen/summon
 	}
 	execute positioned 30 29 -225 run {
 		function targets:summon_pollen
-		function pollen_gen:summon
+		function gen:pollen/summon
 	}
 	execute positioned 31 21 -188 run {
 		function targets:summon_pollen
-		function pollen_gen:summon
+		function gen:pollen/summon
 	}
 	execute positioned -37 21 -262 run {
 		function targets:summon_pollen
-		function pollen_gen:summon
+		function gen:pollen/summon
 	}
 
-	execute positioned -44 29 -187 run function targets:summon_wax
-	execute positioned -3 26 -224 run function targets:summon_wax
-	execute positioned 40 29 -263 run function targets:summon_wax
+	execute positioned -43 29 -187 run {
+		function targets:summon_wax
+		function gen:wax/summon
+	}
+	execute positioned -3 26 -225 run {
+		function targets:summon_wax
+		function gen:wax/summon
+	}
+	execute positioned 38 29 -263 run {
+		function targets:summon_wax
+		function gen:wax/summon
+	}
 
 	LOOP(['a','b'],team){
 		scoreboard players set .team_<%team%> honey 0

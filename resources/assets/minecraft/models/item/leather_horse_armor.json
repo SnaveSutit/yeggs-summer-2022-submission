@@ -1,3 +1,8 @@
 {
-	"parent":"pvbee:item/capture_ring"
+	"parent":"pvbee:item/capture_ring",
+	"overrides":[
+		{
+			"predicate": {"custom_model_data":1}, "model": "pvbee:item/capture_ring_wax"
+		}
+	]
 }

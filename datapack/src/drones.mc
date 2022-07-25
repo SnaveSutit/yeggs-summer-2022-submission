@@ -99,17 +99,20 @@ function state_tick {
 	LOOP(['pollen', 'wax'],resource) {
 		execute if score @s state = #drone.<%resource%>.GET_TARGET state run {
 			LOOP(['a','b'],team){
-				execute (if entity @s[team=<%team%>] if entity @e[type=marker,tag=gen.<%resource%>,scores={<%resource%>=<%resource.length*2%>..},tag=captured_by_<%team%>]) {
-					execute as @e[type=marker,tag=gen.<%resource%>,sort=random,scores={<%resource%>=<%resource.length*2%>..},tag=captured_by_<%team%>] at @s run {
-						scoreboard players operation #target v = @e[type=marker,tag=drone_target,tag=<%resource%>,distance=..1,limit=1] id
+				execute if entity @s[team=<%team%>] run {
+					execute (if entity @e[type=marker,tag=gen.<%resource%>,scores={<%resource%>=<%resource.length*2%>..},tag=captured_by_<%team%>]) {
+						execute as @e[type=marker,tag=gen.<%resource%>,sort=random,scores={<%resource%>=<%resource.length*2%>..},tag=captured_by_<%team%>] at @s run {
+							scoreboard players operation #target v = @e[type=marker,tag=drone_target,tag=<%resource%>,distance=..1,limit=1] id
+						}
+						scoreboard players operation @s target = #target v
+						scoreboard players operation @s state = #drone.<%resource%>.GOTO_TARGET state
+						# say <%team%> <%resource%> found
+						# tellraw @a {"score":{"name":"@s","objective":"state"}}
+					} else {
+						# say <%team%> <%resource%> not found
+						# If no target was found, then return to choose resource state
+						scoreboard players operation @s state = #drone.CHOOSE_RESOURCE state
 					}
-					scoreboard players operation @s target = #target v
-					scoreboard players operation @s state = #drone.<%resource%>.GOTO_TARGET state
-					say <%team%> <%resource%>
-					tellraw @a {"score":{"name":"@s","objective":"state"}}
-				} else {
-					# If no target was found, then return to choose resource state
-					scoreboard players operation @s state = #drone.CHOOSE_RESOURCE state
 				}
 			}
 		}
@@ -184,7 +187,7 @@ function update_rotation {
 	execute as @e[type=marker,tag=drone_target] if score @s id = # v run {
 		tag @s add this.target
 		# tp @e[type=bee,tag=this.drone,distance=..1,limit=1] ~ ~ ~ facing entity @s feet
-		execute as @e[type=bee,tag=this.drone,distance=..1,limit=1] at @s anchored eyes facing entity @e[type=marker,tag=this.target] feet positioned ^ ^ ^0.5 rotated as @s positioned ^ ^ ^1 facing entity @s eyes facing ^ ^ ^-1 positioned as @s rotated ~ 0 run tp @s ~ ~ ~ ~ ~
+		execute as @e[type=bee,tag=this.drone,distance=..1,limit=1] at @s anchored eyes facing entity @e[type=marker,tag=this.target] feet positioned ^ ^ ^0.5 rotated as @s positioned ^ ^ ^1 facing entity @s eyes facing ^ ^ ^-1 positioned as @s rotated ~ 0 run tp @s ~ ~ ~ ~1 ~
 		tag @s remove this.target
 	}
 	tag @s remove this.drone

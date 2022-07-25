@@ -1,0 +1,6 @@
+{
+	"parent": "pvbee:item/capture_ring_base",
+	"textures": {
+		"0": "pvbee:item/capture_ring_wax"
+	}
+}
