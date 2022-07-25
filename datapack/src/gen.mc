@@ -27,9 +27,10 @@ LOOP(['pollen','wax'],resource){
 		}
 
 		clock 1t {
+			<%%config.storage.cap_time = 60%%>
 			execute as @e[type=armor_stand,tag=gen.<%resource%>.ring] at @s run {
-				LOOP(200,i) {
-					execute if score @s cap matches <%i-100%> run tp @s ~ ~ ~ ~<%(i-100)/4%> ~
+				LOOP(config.storage.cap_time*2,i) {
+					execute if score @s cap matches <%i-config.storage.cap_time%> run tp @s ~ ~ ~ ~<%(i-config.storage.cap_time)/4%> ~
 				}
 			}
 		}
@@ -53,11 +54,11 @@ LOOP(['pollen','wax'],resource){
 				scoreboard players operation #cap v = @s cap
 				execute as @e[type=armor_stand,tag=gen.<%resource%>.ring,distance=..3,limit=1] run scoreboard players operation @s cap = #cap v
 
-				execute if score @s cap matches 100.. run function gen:<%resource%>/captured_by_a
-				execute if score @s cap matches ..-100 run function gen:<%resource%>/captured_by_b
+				execute if score @s cap matches <%config.storage.cap_time%>.. run function gen:<%resource%>/captured_by_a
+				execute if score @s cap matches ..-<%config.storage.cap_time%> run function gen:<%resource%>/captured_by_b
 
 				LOOP(['a','b'], team) {
-					execute if entity @s[tag=captured_by_<%team%>, scores={<%resource%>=..100}] run {
+					execute if entity @s[tag=captured_by_<%team%>, scores={<%resource%>=..50}] run {
 						scoreboard players add @s gen_timer 1
 						execute if score @s gen_timer >= #<%team%>.<%resource%>_gen.speed v run {
 							playsound minecraft:block.big_dripleaf.tilt_up block @a ~ ~ ~ 1 1
@@ -67,10 +68,8 @@ LOOP(['pollen','wax'],resource){
 						}
 					}
 				}
-
 				tag @s remove this.gen
 			}
-
 		}
 
 		# function pulse {
@@ -118,9 +117,8 @@ LOOP(['pollen','wax'],resource){
 		function layered_charging_audio {
 			scoreboard players operation # v = @s cap
 			execute if score # v matches ..-1 run scoreboard players operation # v *= -1 v
-			<%%config.temp = 100%%>
-			LOOP(config.temp,i){
-				execute if score # v matches <%i+1%> run playsound minecraft:block.beacon.ambient player @a ~ ~ ~ 2 <%0.5+(i * (1.5 / config.temp))%>
+			LOOP(config.storage.cap_time,i){
+				execute if score # v matches <%i+1%> run playsound minecraft:block.beacon.ambient player @a ~ ~ ~ 2 <%0.5+(i * (1.5 / config.storage.cap_time))%>
 			}
 		}
 		function cap_a {

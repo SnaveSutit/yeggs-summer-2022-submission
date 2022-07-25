@@ -20,6 +20,7 @@ function summon {
 		scoreboard players set @s pollen 0
 		scoreboard players set @s target -1
 		scoreboard players set @s idle_timer 20
+		scoreboard players set @s path_timer 0
 		tag @s remove new
 	}
 }
@@ -76,36 +77,45 @@ function state_tick {
 	}
 
 	execute if score @s state = #drone.CHOOSE_RESOURCE state run {
-		tag @e[type=marker,tag=gen.wax,scores={wax=6..}] add this.targetable
-		tag @e[type=marker,tag=gen.pollen,scores={pollen=10..}] add this.targetable
 
-		scoreboard players set #target v -1
-		scoreboard players set #resource v -1
-		execute as @e[type=marker,tag=this.targetable,limit=1] run {
-			execute if entity @s[tag=gen.wax] run scoreboard players set #resource v 1
-			execute if entity @s[tag=gen.pollen] run scoreboard players set #resource v 2
-			scoreboard players operation #target v = @s id
+		# If there is no pollen or wax currently in stock, and this bee has cargo, return to the hive.
+		execute if score @s wax matches 1.. run scoreboard players operation @s state = #drone.GET_HIVE state
+		execute if score @s pollen matches 1.. run scoreboard players operation @s state = #drone.GET_HIVE state
+
+		execute if score @s state = #drone.CHOOSE_RESOURCE state run {
+			tag @e[type=marker,tag=gen.wax,scores={wax=6..}] add this.targetable
+			tag @e[type=marker,tag=gen.pollen,scores={pollen=10..}] add this.targetable
+
+			scoreboard players set #target v -1
+			scoreboard players set #resource v -1
+			execute as @e[type=marker,tag=this.targetable,sort=random,limit=1] run {
+				execute if entity @s[tag=gen.wax] run scoreboard players set #resource v 1
+				execute if entity @s[tag=gen.pollen] run scoreboard players set #resource v 2
+				scoreboard players operation #target v = @s id
+				# tellraw @a ["t0-",{"score":{ "name":"#target", "objective":"v"}}]
+			}
+			execute (unless score #target v matches -1) {
+				# tellraw @a ["t1-",{"score":{ "name":"#target", "objective":"v"}}]
+				# tellraw @a ["r-",{"score":{ "name":"#resource", "objective":"v"}}]
+				execute if score #resource v matches 1 run {
+					scoreboard players operation @s state = #drone.wax.GET_TARGET state
+					# scoreboard players operation @s target = #target v
+					# say Finding wax
+				}
+				execute if score #resource v matches 2 run {
+					scoreboard players operation @s state = #drone.pollen.GET_TARGET state
+					# scoreboard players operation @s target = #target v
+					# say Finding pollen
+				}
+			} else {
+				# Else, wander around a bit
+				execute if score @s wax matches 0 if score @s pollen matches 0 run {
+					scoreboard players set @s idle_timer 20
+					scoreboard players operation @s state = #drone.IDLE state
+				}
+			}
+			tag @e[type=marker] remove this.targetable
 		}
-		execute (unless score #target v matches -1) {
-			execute if score #resource v matches 1 run {
-				scoreboard players operation @s state = #drone.wax.GET_TARGET state
-				say Finding wax
-			}
-			execute if score #resource v matches 2 run {
-				scoreboard players operation @s state = #drone.pollen.GET_TARGET state
-				say Finding pollen
-			}
-		} else {
-			# If there is no pollen or wax currently in stock, and this bee has cargo, return to the hive.
-			execute if score @s wax matches 1.. run scoreboard players operation @s state = #drone.GET_HIVE state
-			execute if score @s pollen matches 1.. run scoreboard players operation @s state = #drone.GET_HIVE state
-			# Else, wander around a bit
-			execute if score @s wax matches 0 if score @s pollen matches 0 run {
-				scoreboard players set @s idle_timer 20
-				scoreboard players operation @s state = #drone.IDLE state
-			}
-		}
-		tag @e[type=marker] remove this.targetable
 	}
 
 	LOOP(['wax','pollen'],resource) {
@@ -117,11 +127,12 @@ function state_tick {
 							scoreboard players operation #target v = @e[type=marker,tag=drone_target,tag=<%resource%>,distance=..1,limit=1] id
 						}
 						scoreboard players operation @s target = #target v
+						scoreboard players set @s path_timer 100
 						scoreboard players operation @s state = #drone.<%resource%>.GOTO_TARGET state
-						say <%team%> <%resource%> found
+						# say <%team%> <%resource%> found
 						# tellraw @a {"score":{"name":"@s","objective":"state"}}
 					} else {
-						say <%team%> <%resource%> not found
+						# say <%team%> <%resource%> not found
 						# If no target was found, then return to choose resource state
 						scoreboard players operation @s state = #drone.CHOOSE_RESOURCE state
 					}
@@ -148,10 +159,16 @@ function state_tick {
 					scoreboard players operation @s state = #drone.GET_HIVE state
 					scoreboard players operation @s <%resource%> += #space v
 					data modify entity @s HasNectar set value true
+					data modify entity @s CustomName set value '["",{"text":"Drone"},{"text":" [","color":"gray"},{"text":"<%resource%>","color":"yellow"},{"text":"]","color":"gray"}]'
 				}
 				tag @s remove this.drone
 			}
 			function drones:set_motion
+			scoreboard players remove @s path_timer 1
+			execute if score @s path_timer matches ..0 run {
+				scoreboard players set @s idle_timer 20
+				scoreboard players operation @s state = #drone.IDLE state
+			}
 		}
 	}
 
@@ -180,17 +197,18 @@ function state_tick {
 			scoreboard players set #deposited v 1
 		}
 		execute if score #deposited v matches 1 run {
-			scoreboard players set @s wax 0
-			scoreboard players set @s pollen 0
-			scoreboard players set @s idle_timer 20
-			scoreboard players operation @s state = #drone.IDLE state
-			data modify entity @s HasNectar set value false
 			LOOP(['a','b'],team){
 				execute if entity @s[team=<%team%>] run {
 					execute if score @s pollen matches 1.. run scoreboard players add .team_<%team%> honey 1
 					execute if score @s wax matches 1.. run scoreboard players add .team_<%team%> wax 1
 				}
 			}
+			data modify entity @s CustomName set value '["",{"text":"Drone"}]'
+			scoreboard players set @s wax 0
+			scoreboard players set @s pollen 0
+			scoreboard players set @s idle_timer 20
+			scoreboard players operation @s state = #drone.IDLE state
+			data modify entity @s HasNectar set value false
 		}
 		function drones:set_motion
 	}

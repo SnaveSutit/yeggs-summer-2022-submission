@@ -41,6 +41,8 @@ function load {
 	scoreboard players set 100 v 100
 	scoreboard players set 1000 v 1000
 	scoreboard players set -1 v -1
+	
+	scoreboard players set last.id v 0
 
 	tellraw @a {"text":"Reloaded!"}
 }
@@ -96,11 +98,13 @@ function reset {
 
 	LOOP(['a','b'],team){
 		scoreboard players set .team_<%team%> honey 0
+		scoreboard players set .team_<%team%> wax 0
 	}
 }
 
 function tick {
 	LOOP(['a','b'],team){
 		scoreboard players operation [Honey] display_<%team%> = .team_<%team%> honey
+		scoreboard players operation [Wax] display_<%team%> = .team_<%team%> wax
 	}
 }

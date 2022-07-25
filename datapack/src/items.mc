@@ -1,4 +1,8 @@
 
-function bee_head {
+function bee_heads {
 	give @s minecraft:player_head{display:{Name:"{\"text\":\"Bee\"}"},SkullOwner:{Id:[I;-735900145,14437401,-1319116123,275528342],Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjU5MDAxYTg1MWJiMWI5ZTljMDVkZTVkNWM2OGIxZWEwZGM4YmQ4NmJhYmYxODhlMGFkZWQ4ZjkxMmMwN2QwZCJ9fX0="}]}}} 1
+	give @p minecraft:player_head{display:{Name:"{\"text\":\"Captain Bee\"}"},SkullOwner:{Id:[I;474797409,1369329219,-1336862668,-1639557380],Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTkxMGQxZDFkODI3YTkxMTU0ODBiZmY1YmUzODkxZWE5MjA2ODBlNzBjZTdiNzEwZGJkYTllNTlhYjJmMWZjZSJ9fX0="}]}}} 1
+	give @p minecraft:player_head{display:{Name:"{\"text\":\"Officer Bee\"}"},SkullOwner:{Id:[I;789233355,1073172373,-1074853238,-1157748363],Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWYxNjZhNGNlMTJkMzg2MTFhY2UxMmM0ZjA2N2JlNWVkMDg4ZDhhYjkwYjYwZGJmOTNkMzFhNjg0ZmM3NGI5YiJ9fX0="}]}}} 1
+	give @p minecraft:player_head{display:{Name:"{\"text\":\"Pilot Bee\"}"},SkullOwner:{Id:[I;1180968631,-624473113,-1335985717,-1690048513],Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjY4NTdlOTg3NmEzNjQ0ZGViYmYxZmQ3MzQ1YTQ4Zjk5OTcwNWUwYTk5M2ExMzA0OTI4ZmQwNmMxYjNmMWY5NCJ9fX0="}]}}} 1
+	give @p minecraft:player_head{display:{Name:"{\"text\":\"Pufferfish Bee\"}"},SkullOwner:{Id:[I;-589329274,40059932,-1869592779,2079190347],Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWQ1N2RlODdlZjhhMTcxNmIwYWJiZTAxMzU5YTI3YWVhODUxMmZjNTdjMWFhZTcwZGVlNWUxNWY2ZDFmOWRmZCJ9fX0="}]}}} 1
 }
