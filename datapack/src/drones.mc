@@ -12,7 +12,7 @@ function load {
 }
 
 function summon {
-	summon bee ~ ~ ~ {Tags:['drone','new'], PersistenceRequired:1b,NoAI:false,Health:20f,Attributes:[{Name:generic.max_health,Base:20}]}
+	summon bee ~ ~ ~ {Tags:['drone','new'], PersistenceRequired:1b,NoAI:false,Health:20f,Attributes:[{Name:generic.max_health,Base:20}],CustomName:'{"text":"Drone"}',CustomNameVisible:true}
 	execute as @e[type=bee,tag=new,distance=..1,limit=1] at @s run {
 		execute store result score @s id run scoreboard players add last.id i 1
 		scoreboard players set @s state 0
@@ -105,6 +105,8 @@ function state_tick {
 					}
 					scoreboard players operation @s target = #target v
 					scoreboard players operation @s state = #drone.<%resource%>.GOTO_TARGET state
+					say <%team%> <%resource%>
+					tellraw @a {"score":{"name":"@s","objective":"state"}}
 				} else {
 					# If no target was found, then return to choose resource state
 					scoreboard players operation @s state = #drone.CHOOSE_RESOURCE state

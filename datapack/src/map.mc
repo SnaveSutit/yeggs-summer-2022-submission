@@ -8,10 +8,10 @@ function load {
 
 	scoreboard objectives add honey dummy
 
-	scoreboard objectives add display_a dummy ["",{"text":"Team","color":"white"}," ",{"text":"Wasp","color":"dark_gray"}]
-	scoreboard objectives add display_b dummy ["",{"text":"Team","color":"white"}," ",{"text":"Bee","color":"yellow"}]
-	scoreboard objectives setdisplay sidebar.team.dark_gray display_a
-	scoreboard objectives setdisplay sidebar.team.yellow display_b
+	scoreboard objectives add display_a dummy ["",{"text":"Team","color":"white"}," ",{"text":"Red","color":"red"}]
+	scoreboard objectives add display_b dummy ["",{"text":"Team","color":"white"}," ",{"text":"Blue","color":"blue"}]
+	scoreboard objectives setdisplay sidebar.team.red display_a
+	scoreboard objectives setdisplay sidebar.team.blue display_b
 	scoreboard players set [Honey] display_a 0
 	scoreboard players set [Wax] display_a 0
 	scoreboard players set [Honey] display_b 0

@@ -4,7 +4,7 @@ function summon {
 	execute align xyz positioned ~.5 ~.5 ~.5 run summon marker ~ ~ ~ {Tags:['gen.pollen','new']}
 	execute as @e[type=marker,tag=gen.pollen,limit=1,distance=..2,tag=new] at @s run {
 		execute store result score @s id run scoreboard players add last.id v 1
-		summon armor_stand ~ ~-1.5 ~ {Tags:['gen.pollen.ring','new'],Invisible:1b,Marker:false,NoGravity:1b,Invulnerable:1b,ArmorItems:[{},{},{},{id:"minecraft:white_dye",Count:1b}]}
+		summon armor_stand ~ ~-1.5 ~ {Tags:['gen.pollen.ring','new'],Invisible:1b,Marker:true,NoGravity:1b,Invulnerable:1b,ArmorItems:[{},{},{},{id:"minecraft:leather_horse_armor",Count:1b,tag:{display:{color:16777215}}}]}
 		scoreboard players set @s cap 0
 		scoreboard players set @s pollen 0
 		scoreboard players set @s gen_timer 0
@@ -31,7 +31,7 @@ clock 5t {
 			execute if score @s cap matches 1.. run scoreboard players remove @s cap 1
 			execute if score @s cap matches ..-1 run scoreboard players add @s cap 1
 			execute unless score @s cap = #old_cap v run function pollen_gen:layered_charging_audio
-			particle dust 0 1 0 1 ~ ~.5 ~
+			# particle dust 0 1 0 1 ~ ~.5 ~
 		} else {
 			function pollen_gen:layered_charging_audio
 		}
@@ -60,7 +60,7 @@ clock 5t {
 				scoreboard players add @s gen_timer 1
 				execute if score @s gen_timer >= #<%team%>.pollen_gen.speed v run {
 					playsound minecraft:block.big_dripleaf.tilt_up block @a ~ ~ ~ 1 1
-					particle minecraft:falling_nectar ~ ~2 ~ 1 0.5 1 0 10 force @a
+					particle minecraft:falling_nectar ~ ~2 ~ 2 0.5 2 0 20 force @a
 					scoreboard players set @s gen_timer 0
 					scoreboard players operation @s pollen += #<%team%>.pollen_gen.amount v
 				}
@@ -91,12 +91,14 @@ function captured_by_a {
 	tag @s remove captured_by_b
 	function pollen_gen:capture_effects
 	scoreboard players set @s cap 0
+	execute as @e[type=armor_stand,tag=gen.pollen.ring,distance=..3,limit=1] run data modify entity @s ArmorItems[-1].tag.display.color set value 11141120
 }
 function captured_by_b {
 	tag @s add captured_by_b
 	tag @s remove captured_by_a
 	function pollen_gen:capture_effects
 	scoreboard players set @s cap 0
+	execute as @e[type=armor_stand,tag=gen.pollen.ring,distance=..3,limit=1] run data modify entity @s ArmorItems[-1].tag.display.color set value 170
 }
 function capture_effects {
 	playsound minecraft:item.bottle.fill_dragonbreath player @a ~ ~ ~ 1 1
@@ -112,10 +114,10 @@ function layered_charging_audio {
 }
 function cap_a {
 	scoreboard players add @e[type=marker,tag=gen.pollen,limit=1,sort=nearest] cap 1
-	particle dust 0 0 1 1 ~ ~.5 ~
+	# particle dust 0 0 1 1 ~ ~.5 ~
 }
 function cap_b {
 	scoreboard players remove @e[type=marker,tag=gen.pollen,limit=1,sort=nearest] cap 1
-	particle dust 1 0 0 1 ~ ~.5 ~
+	# particle dust 1 0 0 1 ~ ~.5 ~
 }
 

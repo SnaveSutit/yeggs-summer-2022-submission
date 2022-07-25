@@ -1,9 +1,9 @@
 
 function load {
-	team add a {"text":"Wasps","color":"dark_gray"}
-	team modify a color dark_gray
-	team add b {"text":"Bees","color":"yellow"}
-	team modify b color yellow
+	team add a {"text":"Red","color":"red"}
+	team modify a color red
+	team add b {"text":"Blue","color":"blue"}
+	team modify b color blue
 	LOOP(['a','b'],team) {
 		team modify <%team%> friendlyFire false
 		team modify <%team%> seeFriendlyInvisibles false

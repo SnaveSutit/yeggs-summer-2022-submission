@@ -1,7 +1,7 @@
 [
   [
     "lastUpdate",
-    "Sun Jul 24 2022 19:08:13 GMT-0400 (Eastern Daylight Time)"
+    "Sun Jul 24 2022 20:19:46 GMT-0400 (Eastern Daylight Time)"
   ],
   [
     "INTERNAL/VIRTUAL_FILE_SYSTEM",
@@ -128,14 +128,14 @@
       "src\\map.mc": {
         "data\\minecraft\\tags\\functions\\load.json": 3128821809,
         "data\\minecraft\\tags\\functions\\tick.json": 4226510931,
-        "data\\map\\functions\\load.mcfunction": 3714847917,
+        "data\\map\\functions\\load.mcfunction": 3424917335,
         "data\\map\\functions\\zzz\\execute\\0.mcfunction": 398553750,
         "data\\map\\functions\\zzz\\execute\\1.mcfunction": 2568161173,
         "data\\map\\functions\\zzz\\execute\\2.mcfunction": 2136252238,
         "data\\map\\functions\\zzz\\execute\\3.mcfunction": 2136252238,
         "data\\map\\functions\\zzz\\execute\\4.mcfunction": 2136252238,
         "data\\map\\functions\\zzz\\execute\\5.mcfunction": 2136252238,
-        "data\\map\\functions\\reset.mcfunction": 1280098714,
+        "data\\map\\functions\\reset.mcfunction": 4074391330,
         "data\\map\\functions\\tick.mcfunction": 1411699680
       },
       "src\\math.mc": {
@@ -171,26 +171,26 @@
         "data\\math\\functions\\zzz\\load.mcfunction": 2712422752
       },
       "src\\pollen_gen.mc": {
-        "data\\minecraft\\tags\\functions\\load.json": 3099609138,
+        "data\\minecraft\\tags\\functions\\load.json": 2428189445,
         "data\\minecraft\\tags\\functions\\tick.json": 4226510931,
-        "data\\pollen_gen\\functions\\zzz\\execute\\1.mcfunction": 2933983131,
-        "data\\pollen_gen\\functions\\summon.mcfunction": 1677005362,
-        "data\\pollen_gen\\functions\\zzz\\execute\\3.mcfunction": 4126845062,
-        "data\\pollen_gen\\functions\\zzz\\clock\\0.mcfunction": 1931702791,
+        "data\\pollen_gen\\functions\\zzz\\execute\\1.mcfunction": 3486734078,
+        "data\\pollen_gen\\functions\\summon.mcfunction": 2769313609,
+        "data\\pollen_gen\\functions\\zzz\\execute\\3.mcfunction": 575192566,
+        "data\\pollen_gen\\functions\\zzz\\clock\\0.mcfunction": 950076041,
         "data\\pollen_gen\\functions\\zzz\\conditional\\0.mcfunction": 2211312328,
         "data\\pollen_gen\\functions\\zzz\\conditional\\1.mcfunction": 153735262,
-        "data\\pollen_gen\\functions\\zzz\\execute\\13.mcfunction": 3772158482,
-        "data\\pollen_gen\\functions\\zzz\\execute\\12.mcfunction": 2931750492,
-        "data\\pollen_gen\\functions\\zzz\\execute\\15.mcfunction": 1677151569,
-        "data\\pollen_gen\\functions\\zzz\\execute\\14.mcfunction": 287413785,
-        "data\\pollen_gen\\functions\\zzz\\execute\\4.mcfunction": 127268412,
-        "data\\pollen_gen\\functions\\zzz\\clock\\1.mcfunction": 4088008933,
-        "data\\pollen_gen\\functions\\captured_by_a.mcfunction": 3267653,
-        "data\\pollen_gen\\functions\\captured_by_b.mcfunction": 3855817221,
+        "data\\pollen_gen\\functions\\zzz\\execute\\214.mcfunction": 1236393521,
+        "data\\pollen_gen\\functions\\zzz\\execute\\213.mcfunction": 4174246185,
+        "data\\pollen_gen\\functions\\zzz\\execute\\216.mcfunction": 3819846066,
+        "data\\pollen_gen\\functions\\zzz\\execute\\215.mcfunction": 98034600,
+        "data\\pollen_gen\\functions\\zzz\\execute\\204.mcfunction": 3898123059,
+        "data\\pollen_gen\\functions\\zzz\\clock\\1.mcfunction": 41966054,
+        "data\\pollen_gen\\functions\\captured_by_a.mcfunction": 325117205,
+        "data\\pollen_gen\\functions\\captured_by_b.mcfunction": 2222349924,
         "data\\pollen_gen\\functions\\capture_effects.mcfunction": 3851792182,
         "data\\pollen_gen\\functions\\layered_charging_audio.mcfunction": 251907562,
-        "data\\pollen_gen\\functions\\cap_a.mcfunction": 778374274,
-        "data\\pollen_gen\\functions\\cap_b.mcfunction": 2793024741
+        "data\\pollen_gen\\functions\\cap_a.mcfunction": 479097743,
+        "data\\pollen_gen\\functions\\cap_b.mcfunction": 2170601608
       },
       "src\\sqrt.mcm": {
         "data\\minecraft\\tags\\functions\\load.json": 253562117,
@@ -227,7 +227,7 @@
       "src\\teams.mc": {
         "data\\minecraft\\tags\\functions\\load.json": 4196719227,
         "data\\minecraft\\tags\\functions\\tick.json": 4226510931,
-        "data\\teams\\functions\\load.mcfunction": 3509194039,
+        "data\\teams\\functions\\load.mcfunction": 3505115341,
         "data\\teams\\functions\\a\\join.mcfunction": 279580615,
         "data\\teams\\functions\\a\\zzz\\execute\\0.mcfunction": 246057141,
         "data\\teams\\functions\\a\\summon_drone.mcfunction": 2493769809,
@@ -256,7 +256,7 @@
         "data\\minecraft\\tags\\functions\\load.json": 2310722002,
         "data\\minecraft\\tags\\functions\\tick.json": 4226510931,
         "data\\wax_gen\\functions\\zzz\\execute\\1.mcfunction": 1779491137,
-        "data\\wax_gen\\functions\\summon.mcfunction": 2892812104,
+        "data\\wax_gen\\functions\\summon.mcfunction": 2784544243,
         "data\\wax_gen\\functions\\zzz\\conditional\\0.mcfunction": 3660112754,
         "data\\wax_gen\\functions\\zzz\\conditional\\1.mcfunction": 2288902788,
         "data\\wax_gen\\functions\\zzz\\execute\\12.mcfunction": 2889214610,
@@ -264,7 +264,7 @@
         "data\\wax_gen\\functions\\zzz\\execute\\14.mcfunction": 580819057,
         "data\\wax_gen\\functions\\zzz\\execute\\13.mcfunction": 1779391224,
         "data\\wax_gen\\functions\\zzz\\execute\\3.mcfunction": 1864541784,
-        "data\\wax_gen\\functions\\zzz\\clock\\0.mcfunction": 465265497,
+        "data\\wax_gen\\functions\\zzz\\clock\\0.mcfunction": 3461502648,
         "data\\wax_gen\\functions\\captured_by_a.mcfunction": 3048162687,
         "data\\wax_gen\\functions\\captured_by_b.mcfunction": 3408133311,
         "data\\wax_gen\\functions\\capture_effects.mcfunction": 3851792182,
