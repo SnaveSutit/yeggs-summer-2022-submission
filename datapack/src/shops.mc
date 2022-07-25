@@ -6,6 +6,7 @@ dir kits {
 	function summon {
 		execute align xyz positioned ~.5 ~.5 ~.5 run {
 			summon marker ~ ~ ~ {Tags:['shop.kits']}
+			summon area_effect_cloud ~ ~.5 ~ {Tags:['shop.upgrades'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomName:'{"text":"🗡 Kits 🏹","color":"gold"}',CustomNameVisible:1b}
 			setblock ~ ~ ~ minecraft:dropper[facing=down]{CustomName:'{"text":"Kits Shop"}'}
 		}
 	}
@@ -110,6 +111,7 @@ dir upgrades {
 	function summon {
 		execute align xyz positioned ~.5 ~.5 ~.5 run {
 			summon marker ~ ~ ~ {Tags:['shop.upgrades']}
+			summon area_effect_cloud ~ ~.5 ~ {Tags:['shop.upgrades'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomName:'{"text":"↑ Upgrades 🧪","color":"green"}',CustomNameVisible:1b}
 			setblock ~ ~ ~ minecraft:dropper[facing=down]{CustomName:'{"text":"Upgrade Shop"}'}
 		}
 	}

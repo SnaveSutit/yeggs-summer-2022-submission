@@ -109,8 +109,9 @@ function reset {
 	}
 
 	LOOP(['a','b'],team){
+		bossbar set minecraft:hive_<%team%> players
 		bossbar set minecraft:swarm_<%team%> players
-		scoreboard players set .team_<%team%> health 100
+		scoreboard players set .team_<%team%> health 60
 		scoreboard players set .team_<%team%> honey 0
 		scoreboard players set .team_<%team%> wax 0
 		scoreboard players set .team_<%team%> drones 0
@@ -119,6 +120,24 @@ function reset {
 		scoreboard players set #<%team%>.attacking v 0
 	}
 
+	kill @e[tag=shop.kits]
+	kill @e[tag=shop.upgrades]
+
+	execute positioned -3 25 -165 run {
+		function shops:kits/summon
+	}
+	execute positioned -3 25 -285 run {
+		function shops:kits/summon
+	}
+
+	execute positioned -1 25 -165 run {
+		function shops:upgrades/summon
+	}
+	execute positioned -5 25 -285 run {
+		function shops:upgrades/summon
+	}
+
+	scoreboard players set #running v 0
 	function upgrades:reset
 }
 
@@ -130,8 +149,9 @@ function tick {
 		scoreboard players operation [Soldiers] display_<%team%> = .team_<%team%> soldiers
 
 		execute if score #<%team%>.attacking v matches 0 if score .team_<%team%> soldiers matches 20.. run {
-			execute as @e[type=bee,tag=soldier,team=<%team%>] run {
-				scoreboard players operation @s target = @e[type=marker,tag=drone_target,tag=hive,limit=1,team=<%team==='a'?'b':'a'%>] id
+			scoreboard players operation #target v = @e[type=marker,tag=drone_target,tag=hive,limit=1,tag=!team_<%team%>] id
+			execute as @e[type=bee,tag=soldier,team=<%team%>] at @s run {
+				scoreboard players operation @s target = #target v
 				scoreboard players operation @s state = #soldier.ATTACK state
 			}
 			scoreboard players set #<%team%>.attacking v 1
@@ -152,6 +172,22 @@ clock 1s {
 }
 
 function start {
-	bossbar set minecraft:swarm_a players @a
-	bossbar set minecraft:swarm_b players @a
+	scoreboard players set #running v 1
+}
+
+clock 6s {
+	execute if score #running v matches 1 run {
+		bossbar set minecraft:hive_a players @a
+		bossbar set minecraft:swarm_a players @a
+		bossbar set minecraft:hive_b players
+		bossbar set minecraft:swarm_b players
+		schedule 3s replace {
+			execute if score #running v matches 1 run {
+				bossbar set minecraft:hive_a players
+				bossbar set minecraft:swarm_a players
+				bossbar set minecraft:hive_b players @a
+				bossbar set minecraft:swarm_b players @a
+			}
+		}
+	}
 }

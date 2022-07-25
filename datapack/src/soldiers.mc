@@ -69,14 +69,19 @@ function state_tick {
 		function soldiers:set_motion
 	}
 	execute if score @s state = #soldier.ATTACK state run {
-		scoreboard players set #deposited v 0
-		execute if entity @e[type=marker,tag=hive,distance=..1] run {
-			say Damaged enemy hive!
-			tp @s ~ -2000 ~
-			kill @s
-			scoreboard players set #deposited v 1
+		LOOP(['a','b'],team) {
+			execute if entity @s[team=<%team%>] if entity @e[type=marker,tag=hive,tag=!team_<%team%>,distance=..1] run {
+				# say Damaged enemy hive!
+				kill @s
+				tp @s ~ -2000 ~
+				scoreboard players remove .team_<%team==='a'?'b':'a'%> health 1
+			}
 		}
 		function soldiers:set_motion
+		execute unless block ~ ~.7 ~ air run {
+			tp @s ~ ~1 ~
+			execute at @s unless block ~ ~ ~ air run function $block
+		}
 	}
 }
 

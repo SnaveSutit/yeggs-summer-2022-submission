@@ -10,8 +10,14 @@ function load {
 	bossbar add swarm_b ["",{"text":"Blue Swarm","color":"blue"}]
 	bossbar set minecraft:swarm_b color blue
 
+	bossbar add hive_a ["",{"text":"Red Hive","color":"red"}]
+	bossbar set minecraft:hive_a color red
+	bossbar add hive_b ["",{"text":"Blue Hive","color":"blue"}]
+	bossbar set minecraft:hive_b color blue
+
 	LOOP(['a','b'],team) {
 		bossbar set minecraft:swarm_<%team%> max 20
+		bossbar set minecraft:hive_<%team%> max 60
 
 		team modify <%team%> friendlyFire false
 		team modify <%team%> seeFriendlyInvisibles false
