@@ -159,7 +159,7 @@ function state_tick {
 					scoreboard players operation @s state = #drone.GET_HIVE state
 					scoreboard players operation @s <%resource%> += #space v
 					data modify entity @s HasNectar set value true
-					data modify entity @s CustomName set value '["",{"text":"Drone"},{"text":" [","color":"gray"},{"text":"<%resource%>","color":"yellow"},{"text":"]","color":"gray"}]'
+					data modify entity @s CustomName set value '["",{"text":"Drone"},{"text":" [","color":"gray"},{"text":"<%resource === 'pollen' ? 'Nectar' : 'Wax' %>","color":"yellow"},{"text":"]","color":"gray"}]'
 				}
 				tag @s remove this.drone
 			}

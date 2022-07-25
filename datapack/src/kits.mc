@@ -1,7 +1,7 @@
 
-function pollenator {
+function chambeeion {
 	clear @s
-	item replace entity @s armor.head with minecraft:player_head{display:{Name:"{\"text\":\"Pollenator\"}"},SkullOwner:{Id:[I;-735900145,14437401,-1319116123,275528342],Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjU5MDAxYTg1MWJiMWI5ZTljMDVkZTVkNWM2OGIxZWEwZGM4YmQ4NmJhYmYxODhlMGFkZWQ4ZjkxMmMwN2QwZCJ9fX0="}]}},HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s}]}
+	item replace entity @s armor.head with minecraft:player_head{display:{Name:"{\"text\":\"Chambeeion\"}"},SkullOwner:{Id:[I;-735900145,14437401,-1319116123,275528342],Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjU5MDAxYTg1MWJiMWI5ZTljMDVkZTVkNWM2OGIxZWEwZGM4YmQ4NmJhYmYxODhlMGFkZWQ4ZjkxMmMwN2QwZCJ9fX0="}]}},HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s}]}
 	item replace entity @s armor.chest with minecraft:leather_chestplate{HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s}]}
 	item replace entity @s armor.legs with minecraft:iron_leggings{HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s}]}
 	item replace entity @s armor.feet with minecraft:iron_boots{HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s}]}
@@ -25,9 +25,9 @@ function stinger {
 	item replace entity @s hotbar.8 with minecraft:cooked_beef 20
 }
 
-function beefy {
+function beefender {
 	clear @s
-	item replace entity @s armor.head with minecraft:player_head{display:{Name:"{\"text\":\"Beefy\"}"},SkullOwner:{Id:[I;-589329274,40059932,-1869592779,2079190347],Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWQ1N2RlODdlZjhhMTcxNmIwYWJiZTAxMzU5YTI3YWVhODUxMmZjNTdjMWFhZTcwZGVlNWUxNWY2ZDFmOWRmZCJ9fX0="}]}}} 1
+	item replace entity @s armor.head with minecraft:player_head{display:{Name:"{\"text\":\"Beefender\"}"},SkullOwner:{Id:[I;-589329274,40059932,-1869592779,2079190347],Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWQ1N2RlODdlZjhhMTcxNmIwYWJiZTAxMzU5YTI3YWVhODUxMmZjNTdjMWFhZTcwZGVlNWUxNWY2ZDFmOWRmZCJ9fX0="}]}}} 1
 	item replace entity @s armor.chest with minecraft:leather_chestplate{HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s}]}
 	item replace entity @s armor.legs with minecraft:diamond_leggings{HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s}]}
 	item replace entity @s armor.feet with minecraft:diamond_boots{HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s}]}
@@ -37,9 +37,9 @@ function beefy {
 	item replace entity @s hotbar.8 with minecraft:cooked_beef 20
 }
 
-function beefender {
+function pollenator {
 	clear @s
-	item replace entity @s armor.head with minecraft:player_head{display:{Name:"{\"text\":\"Beefender\"}"},SkullOwner:{Id:[I;1180968631,-624473113,-1335985717,-1690048513],Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjY4NTdlOTg3NmEzNjQ0ZGViYmYxZmQ3MzQ1YTQ4Zjk5OTcwNWUwYTk5M2ExMzA0OTI4ZmQwNmMxYjNmMWY5NCJ9fX0="}]}}} 1
+	item replace entity @s armor.head with minecraft:player_head{display:{Name:"{\"text\":\"Pollenator\"}"},SkullOwner:{Id:[I;1180968631,-624473113,-1335985717,-1690048513],Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjY4NTdlOTg3NmEzNjQ0ZGViYmYxZmQ3MzQ1YTQ4Zjk5OTcwNWUwYTk5M2ExMzA0OTI4ZmQwNmMxYjNmMWY5NCJ9fX0="}]}}} 1
 	item replace entity @s armor.chest with minecraft:leather_chestplate{HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s}]}
 	item replace entity @s armor.legs with minecraft:leather_leggings{HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s}]}
 	item replace entity @s armor.feet with minecraft:leather_boots{HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s}]}

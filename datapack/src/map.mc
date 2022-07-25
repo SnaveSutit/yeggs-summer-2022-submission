@@ -7,20 +7,25 @@ function load {
 	scoreboard objectives add timer dummy
 
 	scoreboard objectives add honey dummy
+	scoreboard objectives add wax dummy
+	scoreboard objectives add drones dummy
+	scoreboard objectives add soldiers dummy
+	scoreboard objectives add health dummy
 
 	scoreboard objectives add display_a dummy ["",{"text":"Team","color":"white"}," ",{"text":"Red","color":"red"}]
 	scoreboard objectives add display_b dummy ["",{"text":"Team","color":"white"}," ",{"text":"Blue","color":"blue"}]
 	scoreboard objectives setdisplay sidebar.team.red display_a
 	scoreboard objectives setdisplay sidebar.team.blue display_b
-	scoreboard players set [Honey] display_a 0
-	scoreboard players set [Wax] display_a 0
-	scoreboard players set [Honey] display_b 0
-	scoreboard players set [Wax] display_b 0
+	LOOP(['a','b'],team){
+		scoreboard players set [Honey] display_<%team%> 0
+		scoreboard players set [Wax] display_<%team%> 0
+		scoreboard players set [Drones] display_<%team%> 0
+		scoreboard players set [Soldiers] display_<%team%> 0
+	}
 
 	scoreboard objectives add gen_timer dummy
 
 	scoreboard objectives add state dummy
-	scoreboard objectives add wax dummy
 	scoreboard objectives add pollen dummy
 	scoreboard objectives add target dummy
 	scoreboard objectives add idle_timer dummy
@@ -41,7 +46,7 @@ function load {
 	scoreboard players set 100 v 100
 	scoreboard players set 1000 v 1000
 	scoreboard players set -1 v -1
-	
+
 	scoreboard players set last.id v 0
 
 	tellraw @a {"text":"Reloaded!"}
@@ -49,7 +54,7 @@ function load {
 
 function reset {
 	kill @e[type=bee,tag=drone]
-	kill @e[type=bee,tag=attacker]
+	kill @e[type=bee,tag=soldier]
 	kill @e[type=marker,tag=hive]
 	kill @e[type=marker,tag=drone_target]
 	kill @e[type=marker,tag=gen.pollen]
@@ -96,15 +101,57 @@ function reset {
 		function gen:wax/summon
 	}
 
+	execute positioned 7 29 -174 run {
+		function targets:summon_swarm
+	}
+	execute positioned -13 29 -276 run {
+		function targets:summon_swarm
+	}
+
 	LOOP(['a','b'],team){
+		bossbar set minecraft:swarm_<%team%> players
+		scoreboard players set .team_<%team%> health 100
 		scoreboard players set .team_<%team%> honey 0
 		scoreboard players set .team_<%team%> wax 0
+		scoreboard players set .team_<%team%> drones 0
+		scoreboard players set .team_<%team%> soldiers 0
+
+		scoreboard players set #<%team%>.attacking v 0
 	}
+
+	function upgrades:reset
 }
 
 function tick {
 	LOOP(['a','b'],team){
 		scoreboard players operation [Honey] display_<%team%> = .team_<%team%> honey
 		scoreboard players operation [Wax] display_<%team%> = .team_<%team%> wax
+		scoreboard players operation [Drones] display_<%team%> = .team_<%team%> drones
+		scoreboard players operation [Soldiers] display_<%team%> = .team_<%team%> soldiers
+
+		execute if score #<%team%>.attacking v matches 0 if score .team_<%team%> soldiers matches 20.. run {
+			execute as @e[type=bee,tag=soldier,team=<%team%>] run {
+				scoreboard players operation @s target = @e[type=marker,tag=drone_target,tag=hive,limit=1,team=<%team==='a'?'b':'a'%>] id
+				scoreboard players operation @s state = #soldier.ATTACK state
+			}
+			scoreboard players set #<%team%>.attacking v 1
+		}
+		execute if score #<%team%>.attacking v matches 1 if score .team_<%team%> soldiers matches ..0 run {
+			scoreboard players set #<%team%>.attacking v 0
+		}
 	}
+}
+
+clock 1s {
+	name update_scores
+	LOOP(['a','b'],team){
+		execute store result score .team_<%team%> drones if entity @e[type=bee,tag=drone,team=<%team%>]
+		execute store result score .team_<%team%> soldiers if entity @e[type=bee,tag=soldier,team=<%team%>]
+		execute store result bossbar minecraft:swarm_<%team%> value run scoreboard players get .team_<%team%> soldiers
+	}
+}
+
+function start {
+	bossbar set minecraft:swarm_a players @a
+	bossbar set minecraft:swarm_b players @a
 }
