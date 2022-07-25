@@ -56,19 +56,6 @@ LOOP(['pollen','wax'],resource){
 				execute if score @s cap matches 100.. run function gen:<%resource%>/captured_by_a
 				execute if score @s cap matches ..-100 run function gen:<%resource%>/captured_by_b
 
-				# scoreboard players operation #<%resource%> v = @s <%resource%>
-				# execute if score @s <%resource%> matches 1.. as @e[type=bee,dx=0,dy=0,dz=0,scores={<%resource%>=..9}] run {
-				# 	scoreboard players set #count v 10
-				# 	scoreboard players operation #count v -= @s <%resource%>
-				# 	execute if score #<%resource%> v >= #count v run {
-				# 		scoreboard players operation #<%resource%> v -= #count v
-				# 		scoreboard players set @s <%resource%> 10
-				# 		data modify entity @s HasNectar set value true
-				# 		tellraw @a ["", {"text":"Gathered "}, {"score":{"name":"#count","objective":"v"}}, {"text":" <%resource%>!"}]
-				# 	}
-				# }
-				# execute unless score #<%resource%> v = @s <%resource%> run scoreboard players operation @s <%resource%> = #<%resource%> v
-
 				LOOP(['a','b'], team) {
 					execute if entity @s[tag=captured_by_<%team%>, scores={<%resource%>=..100}] run {
 						scoreboard players add @s gen_timer 1

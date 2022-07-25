@@ -76,14 +76,25 @@ function state_tick {
 	}
 
 	execute if score @s state = #drone.CHOOSE_RESOURCE state run {
-		execute (if entity @e[type=marker,tag=gen.wax,scores={wax=1..}]) {
-			scoreboard players operation @s state = #drone.wax.GET_TARGET state
-			# say Collecting wax
+		tag @e[type=marker,tag=gen.wax,scores={wax=6..}] add this.targetable
+		tag @e[type=marker,tag=gen.pollen,scores={pollen=10..}] add this.targetable
 
-		} else execute (if entity @e[type=marker,tag=gen.pollen,scores={pollen=10..}]) {
-			scoreboard players operation @s state = #drone.pollen.GET_TARGET state
-			# say Collecting pollen
-
+		scoreboard players set #target v -1
+		scoreboard players set #resource v -1
+		execute as @e[type=marker,tag=this.targetable,limit=1] run {
+			execute if entity @s[tag=gen.wax] run scoreboard players set #resource v 1
+			execute if entity @s[tag=gen.pollen] run scoreboard players set #resource v 2
+			scoreboard players operation #target v = @s id
+		}
+		execute (unless score #target v matches -1) {
+			execute if score #resource v matches 1 run {
+				scoreboard players operation @s state = #drone.wax.GET_TARGET state
+				say Finding wax
+			}
+			execute if score #resource v matches 2 run {
+				scoreboard players operation @s state = #drone.pollen.GET_TARGET state
+				say Finding pollen
+			}
 		} else {
 			# If there is no pollen or wax currently in stock, and this bee has cargo, return to the hive.
 			execute if score @s wax matches 1.. run scoreboard players operation @s state = #drone.GET_HIVE state
@@ -94,9 +105,10 @@ function state_tick {
 				scoreboard players operation @s state = #drone.IDLE state
 			}
 		}
+		tag @e[type=marker] remove this.targetable
 	}
 
-	LOOP(['pollen', 'wax'],resource) {
+	LOOP(['wax','pollen'],resource) {
 		execute if score @s state = #drone.<%resource%>.GET_TARGET state run {
 			LOOP(['a','b'],team){
 				execute if entity @s[team=<%team%>] run {
@@ -106,10 +118,10 @@ function state_tick {
 						}
 						scoreboard players operation @s target = #target v
 						scoreboard players operation @s state = #drone.<%resource%>.GOTO_TARGET state
-						# say <%team%> <%resource%> found
+						say <%team%> <%resource%> found
 						# tellraw @a {"score":{"name":"@s","objective":"state"}}
 					} else {
-						# say <%team%> <%resource%> not found
+						say <%team%> <%resource%> not found
 						# If no target was found, then return to choose resource state
 						scoreboard players operation @s state = #drone.CHOOSE_RESOURCE state
 					}
@@ -174,7 +186,10 @@ function state_tick {
 			scoreboard players operation @s state = #drone.IDLE state
 			data modify entity @s HasNectar set value false
 			LOOP(['a','b'],team){
-				execute if entity @s[team=<%team%>] run scoreboard players add .team_<%team%> honey 1
+				execute if entity @s[team=<%team%>] run {
+					execute if score @s pollen matches 1.. run scoreboard players add .team_<%team%> honey 1
+					execute if score @s wax matches 1.. run scoreboard players add .team_<%team%> wax 1
+				}
 			}
 		}
 		function drones:set_motion
