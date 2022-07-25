@@ -27,6 +27,7 @@ LOOP(['pollen','wax'],resource){
 		}
 
 		clock 1t {
+			<%%if (!config.storage) config.storage = {}%%>
 			<%%config.storage.cap_time = 60%%>
 			execute as @e[type=armor_stand,tag=gen.<%resource%>.ring] at @s run {
 				LOOP(config.storage.cap_time*2,i) {
