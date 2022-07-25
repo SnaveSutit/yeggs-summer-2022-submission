@@ -1,9 +1,9 @@
 
 function reset {
 	LOOP(['a','b'],team){
-		scoreboard players set #<%team%>.pollen_gen.speed v 60
+		scoreboard players set #<%team%>.pollen_gen.speed v 80
 		scoreboard players set #<%team%>.pollen_gen.amount v 10
-		scoreboard players set #<%team%>.wax_gen.speed v 60
+		scoreboard players set #<%team%>.wax_gen.speed v 80
 		scoreboard players set #<%team%>.wax_gen.amount v 6
 		scoreboard players set #<%team%>.gen_speed.honey_cost v 8
 		scoreboard players set #<%team%>.gen_speed.wax_cost v 5
@@ -16,11 +16,11 @@ function reset {
 		scoreboard players set #<%team%>.hive.max_bees.increase_multiplier v 2000
 		scoreboard players set #<%team%>.hive.max_bees.cost_multiplier v 1500
 
-		scoreboard players set #<%team%>.new_drone.honey_cost v 4
+		scoreboard players set #<%team%>.new_drone.honey_cost v 5
 		scoreboard players set #<%team%>.new_drone.cost_multiplier v 1000
 
-		scoreboard players set #<%team%>.new_soldier.honey_cost v 4
-		scoreboard players set #<%team%>.new_soldier.wax_cost v 1
+		scoreboard players set #<%team%>.new_soldier.honey_cost v 10
+		scoreboard players set #<%team%>.new_soldier.wax_cost v 2
 		scoreboard players set #<%team%>.new_soldier.cost_multiplier v 1000
 
 		scoreboard players set #<%team%>.hive.max_honey v 50

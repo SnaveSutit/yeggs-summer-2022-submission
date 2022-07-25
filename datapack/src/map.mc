@@ -12,6 +12,8 @@ function load {
 	scoreboard objectives add soldiers dummy
 	scoreboard objectives add health dummy
 
+	scoreboard objectives add death deathCount
+
 	scoreboard objectives add display_a dummy ["",{"text":"Team","color":"white"}," ",{"text":"Red","color":"red"}]
 	scoreboard objectives add display_b dummy ["",{"text":"Team","color":"white"}," ",{"text":"Blue","color":"blue"}]
 	LOOP(['a','b'],team){
@@ -49,9 +51,11 @@ function load {
 
 	gamerule naturalRegeneration true
 	gamerule fallDamage true
-	gamerule drowningDamage true
+	gamerule drowningDamage false
 	gamerule keepInventory true
 	gamerule fireDamage true
+
+	forceload add -82 -316 84 -115
 
 	tellraw @a {"text":"Reloaded!"}
 }
@@ -174,13 +178,13 @@ function tick {
 		scoreboard players operation [Soldiers] display_<%team%> = .team_<%team%> soldiers
 
 		LOOP(['honey','wax'],resource) {
-			scoreboard players add #<%team%>_warning_cooldown v 0
-			execute if score #<%team%>_warning_cooldown v matches 1.. run scoreboard players remove #<%team%>_warning_cooldown v 1
-			execute if score #<%team%>_warning_cooldown v matches 0 if score .team_<%team%> <%resource%> > #<%team%>.hive.max_<%resource%> v run {
+			scoreboard players add #<%team%>_<%resource%>_warning_cooldown v 0
+			execute if score #<%team%>_<%resource%>_warning_cooldown v matches 1.. run scoreboard players remove #<%team%>_<%resource%>_warning_cooldown v 1
+			execute if score #<%team%>_<%resource%>_warning_cooldown v matches 0 if score .team_<%team%> <%resource%> > #<%team%>.hive.max_<%resource%> v run {
 				scoreboard players operation .team_<%team%> <%resource%> = #<%team%>.hive.max_<%resource%> v
 				tellraw @a[team=<%team%>] {"text":"Your hive has reached its maximum <%resource.charAt(0).toUpperCase()+resource.slice(1)%> capacity! Spend some <%resource.charAt(0).toUpperCase()+resource.slice(1)%> or upgrade your hive to collect more!","color":"red"}
 				playsound minecraft:block.note_block.pling block @a[team=<%team%>] ~ ~ ~ 10000 1
-				scoreboard players set #<%team%>_warning_cooldown v 600
+				scoreboard players set #<%team%>_<%resource%>_warning_cooldown v 600
 			}
 		}
 
@@ -202,6 +206,9 @@ function tick {
 				scoreboard players operation @s target = #target v
 				scoreboard players operation @s state = #soldier.ATTACK state
 			}
+			title @a[team=<%team%>] times 10 40 10
+			title @a[team=<%team%>] title ""
+			title @a[team=<%team%>] subtitle ["",{"text":"Your swarm is attacking the enemy Hive!","color":"green"}]
 			scoreboard players set #<%team%>.attacking v 1
 		}
 		execute if score #<%team%>.attacking v matches 1 if score .team_<%team%> soldiers matches ..0 run {
@@ -209,7 +216,15 @@ function tick {
 		}
 	}
 
-	execute if block -67 45 -292 minecraft:crimson_button[powered=true] run function map:start
+	execute as @e[type=player,scores={death=1..}] run {
+		scoreboard players set @s death 0
+		execute if entity @s[tag=chambeeion] run function kits:chambeeion
+		execute if entity @s[tag=stinger] run function kits:stinger
+		execute if entity @s[tag=beefender] run function kits:beefender
+		execute if entity @s[tag=pollenator] run function kits:pollenator
+	}
+
+	execute if block -67 45 -292 minecraft:crimson_button[powered=true] run function map:check_start_condition
 }
 
 clock 10t {
@@ -246,8 +261,45 @@ clock 1s {
 	}
 }
 
+function check_start_condition {
+	setblock -67 45 -292 air
+
+	execute store result score #team_a_count v if entity @a[team=a]
+	execute store result score #team_b_count v if entity @a[team=b]
+
+	scoreboard players add #confirm v 0
+	execute (if score #team_a_count v matches 0) {
+		tellraw @a {"text":"No players on Red team!","color":"red"}
+		setblock -67 45 -292 minecraft:crimson_button
+	} else execute (if score #team_b_count v matches 0) {
+		tellraw @a {"text":"No players on Blue team!","color":"red"}
+		setblock -67 45 -292 minecraft:crimson_button
+	} else execute (if score #team_a_count v matches 1..2) {
+		execute (if score #confirm v matches 1) {
+			scoreboard players set #confirm v 0
+			function map:start
+		} else {
+			tellraw @a ["",{"text":"Warning! ","color":"gold"},{"text":"Red team is below the recommended player count (3).","color":"red"}, {"text":"\nThe game is balanced for 3-8 players on each team.","color":"gold"},{"text":"\nTo confirm that you want to continue with this player count; press the start button.","color":"gold"}]
+			scoreboard players set #confirm v 1
+			setblock -67 45 -292 minecraft:crimson_button
+		}
+	} else execute (if score #team_b_count v matches 1..2) {
+		execute (if score #confirm v matches 1) {
+			scoreboard players set #confirm v 0
+			function map:start
+		} else {
+			tellraw @a ["",{"text":"Warning! ","color":"gold"},{"text":"Blue team is below the recommended player count (3).","color":"red"}, {"text":"\nThe game is balanced for 3-8 players on each team.","color":"gold"},{"text":"\nTo confirm that you want to continue with this player count; press the start button.","color":"gold"}]
+			scoreboard players set #confirm v 1
+			setblock -67 45 -292 minecraft:crimson_button
+		}
+	} else {
+		function map:start
+	}
+}
+
 function start {
 	scoreboard players set #running v 1
+	team join spectator @a[team=]
 	gamemode adventure @a[team=!spectator,tag=!Admin]
 	gamemode spectator @a[team=spectator]
 	spawnpoint @a[team=a] -2 26 -172 0
@@ -262,7 +314,11 @@ function start {
 	kill @e[type=area_effect_cloud,tag=start_button]
 	setblock -67 45 -292 air
 	execute as @a run function kits:chambeeion
-	LOOP(5,i){
+
+	effect give @a minecraft:regeneration 1 255 true
+	effect give @a minecraft:saturation 1 20 true
+
+	LOOP(2,i){
 		function teams:a/summon_drone
 		function teams:b/summon_drone
 	}

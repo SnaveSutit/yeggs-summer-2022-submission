@@ -10,6 +10,11 @@ function chambeeion {
 	item replace entity @s hotbar.8 with minecraft:cooked_beef 20
 	item replace entity @s hotbar.6 with minecraft:splash_potion{id:"minecraft:splash_potion",Potion:"minecraft:healing"}
 	item replace entity @s hotbar.7 with minecraft:splash_potion{id:"minecraft:splash_potion",Potion:"minecraft:healing"}
+
+	tag @s add chambeeion
+	tag @s remove stinger
+	tag @s remove beefender
+	tag @s remove pollenator
 }
 
 function stinger {
@@ -23,6 +28,11 @@ function stinger {
 	item replace entity @s hotbar.1 with minecraft:bow{HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s},{id:"minecraft:infinity",lvl:1s},{id:"minecraft:knockback",lvl:1s}]}
 	item replace entity @s inventory.0 with minecraft:arrow 1
 	item replace entity @s hotbar.8 with minecraft:cooked_beef 20
+
+	tag @s add stinger
+	tag @s remove chambeeion
+	tag @s remove beefender
+	tag @s remove pollenator
 }
 
 function beefender {
@@ -35,6 +45,11 @@ function beefender {
 	item replace entity @s hotbar.0 with minecraft:stone_sword{HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s}]}
 	item replace entity @s hotbar.1 with minecraft:shield{HideFlags:127,Unbreakable:1b}
 	item replace entity @s hotbar.8 with minecraft:cooked_beef 20
+
+	tag @s add beefender
+	tag @s remove chambeeion
+	tag @s remove stinger
+	tag @s remove pollenator
 }
 
 function pollenator {
@@ -56,4 +71,9 @@ function pollenator {
 	item replace entity @s hotbar.6 with minecraft:splash_potion{Potion:"minecraft:invisibility"} 1
 	item replace entity @s hotbar.7 with minecraft:splash_potion{Potion:"minecraft:strong_healing"} 1
 	item replace entity @s hotbar.8 with minecraft:cooked_beef 20
+
+	tag @s add pollenator
+	tag @s remove chambeeion
+	tag @s remove stinger
+	tag @s remove beefender
 }

@@ -5,20 +5,16 @@
   - Attacker bees
     - Hover around the friendly hive until there are enough to attack
     - Fly towards the enemy hive and on contact deal damage to it
-  - Defender bees - STRECH GOAL
-    - Fly to the nearest undefended generator
 
-- Add a failsafe that teleports bees if they don't reach their target after a certain amount of time
-
+- Make sure kit tags are removed when the game resets
 - Add attribution to bensound.com for music
-
-- Add shop system
-- Add kit select system
-- Add wax generators
+- Add nametags to each team room
+- Add music!
+- Player's armor should be bee themed
+- Make the double start button confirm reset when someone changes team
+- Add capturing messages to each generator
+- Add a system for setting people to spectator who join mid-game
 
 # BUGS
-- Figure out why drones aren't targeting specifically one team's captured points
-
 
 # IDEAS
-- Player's armor should be bee themed
