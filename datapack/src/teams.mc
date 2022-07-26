@@ -29,9 +29,6 @@ function load {
 
 LOOP(['a','b'],team) {
 	dir <%team%> {
-		function join {
-			team join <%team%> @s
-		}
 		function summon_drone {
 			execute at @e[type=marker,tag=hive,tag=team_<%team%>] run {
 				function drones:summon
@@ -44,13 +41,13 @@ LOOP(['a','b'],team) {
 				team join <%team%> @e[type=bee,tag=soldier,distance=..2]
 			}
 		}
-		function debug_summon_drone {
-			execute at @e[type=marker,tag=hive,tag=team_<%team%>] run {
-				LOOP(50,i){
-					function drones:summon
-				}
-				team join <%team%> @e[type=bee,tag=drone,distance=..2]
-			}
-		}
+		# function debug_summon_drone {
+		# 	execute at @e[type=marker,tag=hive,tag=team_<%team%>] run {
+		# 		LOOP(50,i){
+		# 			function drones:summon
+		# 		}
+		# 		team join <%team%> @e[type=bee,tag=drone,distance=..2]
+		# 	}
+		# }
 	}
 }

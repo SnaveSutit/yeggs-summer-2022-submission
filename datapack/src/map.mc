@@ -3,6 +3,7 @@ function load {
 	scoreboard objectives add i dummy
 	scoreboard objectives add v dummy
 	scoreboard objectives add id dummy
+	scoreboard objectives add game_id dummy
 	scoreboard objectives add cap dummy
 	scoreboard objectives add timer dummy
 
@@ -11,7 +12,7 @@ function load {
 	scoreboard objectives add drones dummy
 	scoreboard objectives add soldiers dummy
 	scoreboard objectives add health dummy
-
+	scoreboard objectives add leave minecraft.custom:minecraft.leave_game
 	scoreboard objectives add death deathCount
 
 	scoreboard objectives add display_a dummy ["",{"text":"Team","color":"white"}," ",{"text":"Red","color":"red"}]
@@ -71,6 +72,19 @@ function reset {
 	kill @e[type=armor_stand,tag=gen.wax.ring]
 	kill @e[type=area_effect_cloud,tag=gen.pollen.name]
 	kill @e[type=area_effect_cloud,tag=gen.wax.name]
+	kill @e[type=area_effect_cloud,tag=gen.pollen.biome]
+	kill @e[type=area_effect_cloud,tag=gen.wax.biome]
+
+	function haha_bee:remove/all
+	execute positioned -6 26 -288 rotated -90 0 run function haha_bee:summon/default
+	execute positioned -6 26 -286 rotated -90 0 run function haha_bee:summon/default
+	execute positioned 0 26 -162 rotated 90 0 run function haha_bee:summon/default
+	execute positioned 0 26 -164 rotated 90 0 run function haha_bee:summon/default
+	execute as @e[type=minecraft:marker,tag=aj.haha_bee.root] run function haha_bee:animations/idle/play
+
+	function statues:remove/all
+	execute positioned -67 45 -288 rotated 180 0 run function statues:summon/default
+	execute as @e[type=marker,tag=aj.statues.root] run function statues:animations/idle/play
 
 	execute positioned -2 26 -172 run {
 		function targets:summon_hive
@@ -82,20 +96,36 @@ function reset {
 	}
 
 	execute positioned -36 29 -225 run {
+		# Flower Forest
 		function targets:summon_pollen
 		function gen:pollen/summon
+		execute as @e[type=area_effect_cloud,distance=..10,tag=gen.pollen.biome] run {
+			data modify entity @s CustomName set value '[{"text":"Flower Forest"}]'
+		}
 	}
 	execute positioned 30 29 -225 run {
+		# Tulip Thicket
 		function targets:summon_pollen
 		function gen:pollen/summon
+		execute as @e[type=area_effect_cloud,distance=..10,tag=gen.pollen.biome] run {
+			data modify entity @s CustomName set value '[{"text":"Tulip Thicket"}]'
+		}
 	}
 	execute positioned 31 21 -188 run {
+		# Lilac Groves
 		function targets:summon_pollen
 		function gen:pollen/summon
+		execute as @e[type=area_effect_cloud,distance=..10,tag=gen.pollen.biome] run {
+			data modify entity @s CustomName set value '[{"text":"Lilac Groves"}]'
+		}
 	}
 	execute positioned -36 21 -262 run {
+		# Orchid Orchard
 		function targets:summon_pollen
 		function gen:pollen/summon
+		execute as @e[type=area_effect_cloud,distance=..10,tag=gen.pollen.biome] run {
+			data modify entity @s CustomName set value '[{"text":"Orchid Orchard"}]'
+		}
 	}
 
 	execute positioned -43 29 -187 run {
@@ -168,6 +198,14 @@ function reset {
 	effect give @a minecraft:saturation 1 20 true
 
 	scoreboard players set #endgame v 0
+
+	# FIXME Remove this when the map is ready
+	setblock 7 29 -174 air
+	setblock -13 29 -276 air
+	setblock -36 20 -262 air
+	setblock -36 28 -225 air
+	setblock 30 28 -225 air
+	setblock 31 20 -188 air
 }
 
 function tick {
@@ -232,19 +270,49 @@ clock 10t {
 		team join a @s
 		title @s times 10 20 10
 		title @s title [{"text":"Joined Red Team!","color":"red"}]
+		scoreboard players set #confirm v 0
 		playsound minecraft:block.respawn_anchor.charge player @s ~ ~ ~ 100 2
 	}
 	execute as @a[x=-66,y=48,z=-300, dx=3,dy=-3,dz=-2,team=!b] run {
 		team join b @s
 		title @s times 10 20 10
 		title @s title [{"text":"Joined Blue Team!","color":"blue"}]
+		scoreboard players set #confirm v 0
 		playsound minecraft:block.respawn_anchor.charge player @s ~ ~ ~ 100 2
 	}
 	execute as @a[x=-74,y=48,z=-294, dx=-3,dy=-3,dz=-3,team=!spectator] run {
 		team join spectator @s
 		title @s times 10 20 10
 		title @s title [{"text":"Joined Spectators!","color":"gray"}]
+		scoreboard players set #confirm v 0
 		playsound minecraft:block.respawn_anchor.charge player @s ~ ~ ~ 100 2
+	}
+
+	execute if score #running v matches 1 as @a run {
+		execute if score @s leave matches 1.. unless score @s game_id = #game id run {
+			tellraw @s {"text":"Welcome back! Please wait until the current game is over to join in!","color":"green"}
+			team join spectator @s
+			gamemode spectator @s
+			function kits:remove_tags
+			tp @s -3 28 -225
+			scoreboard players set @s leave 0
+		}
+		execute as @a[team=] run {
+			tellraw @s {"text":"Welcome! Please wait until the current gane is over to join in!","color":"green"}
+			team join spectator @s
+			gamemode spectator @s
+			function kits:remove_tags
+			tp @s -3 28 -225
+		}
+	}
+	execute if score #running v matches 0 as @a run {
+		execute if score @s leave matches 1.. run {
+			# tellraw @s {"text":"Welcome back!","color":"green"}
+			gamemode adventure @s
+			tp @a[tag=!Admin] -66 45 -294 0 0
+			function kits:remove_tags
+			scoreboard players set @s leave 0
+		}
 	}
 }
 
@@ -313,15 +381,20 @@ function start {
 
 	kill @e[type=area_effect_cloud,tag=start_button]
 	setblock -67 45 -292 air
-	execute as @a run function kits:chambeeion
+	execute as @a run {
+		function kits:remove_tags
+		function kits:chambeeion
+	}
 
 	effect give @a minecraft:regeneration 1 255 true
 	effect give @a minecraft:saturation 1 20 true
 
-	LOOP(2,i){
+	LOOP(4,i){
 		function teams:a/summon_drone
 		function teams:b/summon_drone
 	}
+	scoreboard players add #game id 1
+	scoreboard players operation @a game_id = #game id
 }
 
 clock 6s {

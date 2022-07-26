@@ -1,0 +1,41 @@
+{
+	"__credit": "Generated using Animated Java (https://animated-java.dev/)",
+	"textures": {
+		"0": "pvbee:item/snavesutit"
+	},
+	"elements": [
+		{
+			"faces": {
+				"north": {"uv": [5, 5, 7, 8], "texture": "#0"},
+				"east": {"uv": [4, 5, 5, 8], "texture": "#0"},
+				"south": {"uv": [8, 5, 10, 8], "texture": "#0"},
+				"west": {"uv": [7, 5, 8, 8], "texture": "#0"},
+				"up": {"uv": [7, 5, 5, 4], "texture": "#0"},
+				"down": {"uv": [9, 4, 7, 5], "texture": "#0"}
+			},
+			"to": [9.6, 9.8, 8.8],
+			"from": [6.4, 5, 7.2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0.2, 8]}
+		},
+		{
+			"faces": {
+				"north": {"uv": [5, 9, 7, 12], "texture": "#0"},
+				"east": {"uv": [4, 9, 5, 12], "texture": "#0"},
+				"south": {"uv": [8, 9, 10, 12], "texture": "#0"},
+				"west": {"uv": [7, 9, 8, 12], "texture": "#0"},
+				"up": {"uv": [7, 9, 5, 8], "texture": "#0"},
+				"down": {"uv": [9, 8, 7, 9], "texture": "#0"}
+			},
+			"to": [9.7, 9.9, 8.9],
+			"from": [6.3, 4.9, 7.1],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0.2, 8]}
+		}
+	],
+	"display": {
+		"head": {
+			"translation": [0, 5.6, 0],
+			"scale": [4, 4, 4],
+			"rotation": [0, 0, 0]
+		}
+	}
+}

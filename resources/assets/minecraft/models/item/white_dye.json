@@ -1,0 +1,102 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "item/white_dye"
+	},
+	"overrides": [
+		{
+			"predicate": {
+				"custom_model_data": 1
+			},
+			"model": "pvbee:rig/statues/body"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 2
+			},
+			"model": "pvbee:rig/statues/head"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 3
+			},
+			"model": "pvbee:rig/statues/right_arm"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 4
+			},
+			"model": "pvbee:rig/statues/left_arm"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 5
+			},
+			"model": "pvbee:rig/statues/right_piv"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 6
+			},
+			"model": "pvbee:rig/statues/left_piv"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 7
+			},
+			"model": "pvbee:rig/statues/command_block"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 8
+			},
+			"model": "pvbee:rig/statues/body2"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 9
+			},
+			"model": "pvbee:rig/statues/head2"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 10
+			},
+			"model": "pvbee:rig/statues/right_arm2"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 11
+			},
+			"model": "pvbee:rig/statues/axe"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 12
+			},
+			"model": "pvbee:rig/statues/left_arm2"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 13
+			},
+			"model": "pvbee:rig/statues/bone"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 14
+			},
+			"model": "pvbee:rig/statues/bone2"
+		}
+	],
+	"aj": {
+		"includedRigs": {
+			"79522d85-e23b-94dd-3e9b-a7ff9fff59a2": {
+				"name": "statues",
+				"usedIDs": [
+					[1, 14]
+				]
+			}
+		}
+	}
+}

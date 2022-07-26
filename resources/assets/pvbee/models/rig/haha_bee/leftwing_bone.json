@@ -1,0 +1,28 @@
+{
+	"__credit": "Generated using Animated Java (https://animated-java.dev/)",
+	"textures": {
+		"0": "pvbee:item/haha_bee"
+	},
+	"elements": [
+		{
+			"faces": {
+				"north": {"uv": [3.75, 7.5, 6, 7.5], "texture": "#0"},
+				"east": {"uv": [2.25, 7.5, 3.75, 7.5], "texture": "#0"},
+				"south": {"uv": [7.5, 7.5, 9.75, 7.5], "texture": "#0"},
+				"west": {"uv": [6, 7.5, 7.5, 7.5], "texture": "#0"},
+				"up": {"uv": [6, 7.5, 3.75, 6], "texture": "#0"},
+				"down": {"uv": [6, 6, 3.75, 7.5], "texture": "#0"}
+			},
+			"to": [8, 5, 10.4],
+			"from": [4.4, 5, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [6.2465, 7.86689, 9.16089]}
+		}
+	],
+	"display": {
+		"head": {
+			"translation": [0, 5.6, 0],
+			"scale": [4, 4, 4],
+			"rotation": [0, 0, 0]
+		}
+	}
+}

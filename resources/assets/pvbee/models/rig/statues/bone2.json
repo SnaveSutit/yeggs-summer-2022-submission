@@ -1,0 +1,41 @@
+{
+	"__credit": "Generated using Animated Java (https://animated-java.dev/)",
+	"textures": {
+		"1": "pvbee:item/galactic_wolf"
+	},
+	"elements": [
+		{
+			"faces": {
+				"north": {"uv": [5, 13, 6, 16], "texture": "#1"},
+				"east": {"uv": [4, 13, 5, 16], "texture": "#1"},
+				"south": {"uv": [7, 13, 8, 16], "texture": "#1"},
+				"west": {"uv": [6, 13, 7, 16], "texture": "#1"},
+				"up": {"uv": [6, 13, 5, 12], "texture": "#1"},
+				"down": {"uv": [7, 12, 6, 13], "texture": "#1"}
+			},
+			"to": [8.8, 9.8, 8.8],
+			"from": [7.2, 5, 7.2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.76, 5, 8]}
+		},
+		{
+			"faces": {
+				"north": {"uv": [1, 13, 2, 16], "texture": "#1"},
+				"east": {"uv": [0, 13, 1, 16], "texture": "#1"},
+				"south": {"uv": [3, 13, 4, 16], "texture": "#1"},
+				"west": {"uv": [2, 13, 3, 16], "texture": "#1"},
+				"up": {"uv": [2, 13, 1, 12], "texture": "#1"},
+				"down": {"uv": [3, 12, 2, 13], "texture": "#1"}
+			},
+			"to": [8.9, 9.9, 8.9],
+			"from": [7.1, 4.9, 7.1],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.76, 5, 8]}
+		}
+	],
+	"display": {
+		"head": {
+			"translation": [0, 5.6, 0],
+			"scale": [4, 4, 4],
+			"rotation": [0, 0, 0]
+		}
+	}
+}

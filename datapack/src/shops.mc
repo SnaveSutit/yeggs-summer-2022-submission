@@ -25,7 +25,7 @@ dir kits {
 						Lore:[
 							'{"text":"Melee class","color":"light_purple","italic":false}',
 							'{"text":"May your sword be deft and your feet be swift!","color":"gray"}',
-							'{"text":"Swap cost: 10 Honey","color":"gold","italic":false}'
+							'{"text":"Swap cost: 0 Honey","color":"gold","italic":false}'
 							]
 						},SkullOwner:{Id:[I;-735900145,14437401,-1319116123,275528342],Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjU5MDAxYTg1MWJiMWI5ZTljMDVkZTVkNWM2OGIxZWEwZGM4YmQ4NmJhYmYxODhlMGFkZWQ4ZjkxMmMwN2QwZCJ9fX0="}]}},HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s}]}},
 					{Slot:2b,Count:1b,id:"minecraft:player_head",tag:{shop_item:1b,kits_shop:1b,stinger_class:1b,display:{
@@ -41,7 +41,7 @@ dir kits {
 						Lore:[
 							'{"text":"Tank class","color":"light_purple","italic":false}',
 							'{"text":"Defend the queen with your mighty shield!","color":"gray"}',
-							'{"text":"Swap cost: 30 Honey","color":"gold","italic":false}'
+							'{"text":"Swap cost: 20 Honey","color":"gold","italic":false}'
 							]
 						},SkullOwner:{Id:[I;-589329274,40059932,-1869592779,2079190347],Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWQ1N2RlODdlZjhhMTcxNmIwYWJiZTAxMzU5YTI3YWVhODUxMmZjNTdjMWFhZTcwZGVlNWUxNWY2ZDFmOWRmZCJ9fX0="}]}}}},
 					{Slot:8b,Count:1b,id:"minecraft:player_head",tag:{shop_item:1b,kits_shop:1b,pollenator_class:1b,display:{
@@ -65,11 +65,10 @@ dir kits {
 					LOOP(['a','b'],team){
 						execute if entity @s[team=<%team%>] run {
 							scoreboard players set #purchase_success v 0
-							execute if score #chambeeion_class v matches 1 if score .team_<%team%> honey matches 10.. run {
+							execute if score #chambeeion_class v matches 1 run {
 								function kits:chambeeion
-								scoreboard players remove .team_<%team%> honey 10
 								scoreboard players set #purchase_success v 1
-								tellraw @a[team=<%team%>] ["",{"text":"["},{"selector":"@s"},{"text":"]"},{"text":" swapped to the chambeeion class for 10 honey.","color":"green"}]
+								tellraw @a[team=<%team%>] ["",{"text":"["},{"selector":"@s"},{"text":"]"},{"text":" swapped to the chambeeion class.","color":"green"}]
 							}
 							execute if score #stinger_class v matches 1 if score .team_<%team%> honey matches 20.. run {
 								function kits:stinger
@@ -77,9 +76,9 @@ dir kits {
 								scoreboard players set #purchase_success v 1
 								tellraw @a[team=<%team%>] ["",{"text":"["},{"selector":"@s"},{"text":"]"},{"text":" swapped to the stinger class for 20 honey.","color":"green"}]
 							}
-							execute if score #beefender_class v matches 1 if score .team_<%team%> honey matches 30.. run {
+							execute if score #beefender_class v matches 1 if score .team_<%team%> honey matches 20.. run {
 								function kits:beefender
-								scoreboard players remove .team_<%team%> honey 30
+								scoreboard players remove .team_<%team%> honey 20
 								scoreboard players set #purchase_success v 1
 								tellraw @a[team=<%team%>] ["",{"text":"["},{"selector":"@s"},{"text":"]"},{"text":" swapped to the beefender class for 30 honey.","color":"green"}]
 							}

@@ -13,11 +13,15 @@ LOOP(['pollen','wax'],resource){
 					summon armor_stand ~ ~-1.5 ~ {Tags:['gen.<%resource%>.ring','new'],Invisible:1b,Marker:true,NoGravity:1b,Invulnerable:1b,ArmorItems:[{},{},{},{id:"minecraft:leather_horse_armor",Count:1b,tag:{CustomModelData:1,display:{color:16777215}}}]}
 				}
 
-				# summon area_effect_cloud ~ ~ ~ {Tags:['gen.<%resource%>.name'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomNameVisible:1b,CustomName:'[{"text":"[","color":"white"},{"text":"0","color":"yellow"},{"text":" <%resource.charAt(0).toUpperCase()+resource.slice(1)%>","color":"yellow"},"]"]'}
-				summon area_effect_cloud ~3 ~-1 ~ {Tags:['gen.<%resource%>.name'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomNameVisible:1b,CustomName:'[{"text":"[","color":"white"},{"text":"0","color":"yellow"},{"text":" <%resource.charAt(0).toUpperCase()+resource.slice(1)%>","color":"yellow"},"]"]'}
-				summon area_effect_cloud ~-3 ~-1 ~ {Tags:['gen.<%resource%>.name'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomNameVisible:1b,CustomName:'[{"text":"[","color":"white"},{"text":"0","color":"yellow"},{"text":" <%resource.charAt(0).toUpperCase()+resource.slice(1)%>","color":"yellow"},"]"]'}
-				summon area_effect_cloud ~ ~-1 ~3 {Tags:['gen.<%resource%>.name'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomNameVisible:1b,CustomName:'[{"text":"[","color":"white"},{"text":"0","color":"yellow"},{"text":" <%resource.charAt(0).toUpperCase()+resource.slice(1)%>","color":"yellow"},"]"]'}
-				summon area_effect_cloud ~ ~-1 ~-3 {Tags:['gen.<%resource%>.name'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomNameVisible:1b,CustomName:'[{"text":"[","color":"white"},{"text":"0","color":"yellow"},{"text":" <%resource.charAt(0).toUpperCase()+resource.slice(1)%>","color":"yellow"},"]"]'}
+				summon area_effect_cloud ~3 ~-1.5 ~ {Tags:['gen.<%resource%>.biome'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomName:'{"text":"","color":"yellow"}',CustomNameVisible:1b}
+				summon area_effect_cloud ~-3 ~-1.5 ~ {Tags:['gen.<%resource%>.biome'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomName:'{"text":"","color":"yellow"}',CustomNameVisible:1b}
+				summon area_effect_cloud ~ ~-1.5 ~3 {Tags:['gen.<%resource%>.biome'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomName:'{"text":"","color":"yellow"}',CustomNameVisible:1b}
+				summon area_effect_cloud ~ ~-1.5 ~-3 {Tags:['gen.<%resource%>.biome'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomName:'{"text":"","color":"yellow"}',CustomNameVisible:1b}
+
+				summon area_effect_cloud ~3 ~-1.9 ~ {Tags:['gen.<%resource%>.name'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomNameVisible:1b,CustomName:'[{"text":"[","color":"white"},{"text":"0","color":"yellow"},{"text":" <%resource.charAt(0).toUpperCase()+resource.slice(1)%>","color":"yellow"},"]"]'}
+				summon area_effect_cloud ~-3 ~-1.9 ~ {Tags:['gen.<%resource%>.name'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomNameVisible:1b,CustomName:'[{"text":"[","color":"white"},{"text":"0","color":"yellow"},{"text":" <%resource.charAt(0).toUpperCase()+resource.slice(1)%>","color":"yellow"},"]"]'}
+				summon area_effect_cloud ~ ~-1.9 ~3 {Tags:['gen.<%resource%>.name'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomNameVisible:1b,CustomName:'[{"text":"[","color":"white"},{"text":"0","color":"yellow"},{"text":" <%resource.charAt(0).toUpperCase()+resource.slice(1)%>","color":"yellow"},"]"]'}
+				summon area_effect_cloud ~ ~-1.9 ~-3 {Tags:['gen.<%resource%>.name'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomNameVisible:1b,CustomName:'[{"text":"[","color":"white"},{"text":"0","color":"yellow"},{"text":" <%resource.charAt(0).toUpperCase()+resource.slice(1)%>","color":"yellow"},"]"]'}
 
 				scoreboard players set @s cap 0
 				scoreboard players set @s <%resource%> 0
@@ -49,6 +53,15 @@ LOOP(['pollen','wax'],resource){
 				scoreboard players operation #old_cap v = @s cap
 				execute if entity @s[tag=!captured_by_a] as @a[distance=..5,team=a] run function gen:<%resource%>/cap_a
 				execute if entity @s[tag=!captured_by_b] as @a[distance=..5,team=b] run function gen:<%resource%>/cap_b
+
+				execute if score #old_cap v matches 0 if score @s cap matches 1 run {
+					execute if entity @s[tag=captured_by_a] as @a[team=a] run {
+						tellraw @s [{"text":"","color":"red"},{"text":"You're losing "},{"selector":"@e[type=area_effect_cloud,tag=gen.<%resource%>.biome,limit=1,distance=..10]","color":"aqua"},{"text":"!"}]
+					}
+					execute if entity @s[tag=captured_by_b] as @a[team=b] run {
+						tellraw @s [{"text":"","color":"red"},{"text":"You're losing "},{"selector":"@e[type=area_effect_cloud,tag=gen.<%resource%>.biome,limit=1,distance=..10]","color":"aqua"},{"text":"!"}]
+					}
+				}
 
 				execute (if score #old_cap v = @s cap) {
 					execute if score @s cap matches 1.. run scoreboard players remove @s cap 1
@@ -107,6 +120,7 @@ LOOP(['pollen','wax'],resource){
 			tag @s add captured_by_a
 			tag @s remove captured_by_b
 			function gen:<%resource%>/capture_effects
+			team join a @e[type=area_effect_cloud,tag=gen.<%resource%>.biome,distance=..10]
 			scoreboard players set @s cap 0
 			!IF(resource === 'wax'){
 				fill ~2 ~-1 ~2 ~-2 ~-1 ~-2 minecraft:red_stained_glass
@@ -119,6 +133,7 @@ LOOP(['pollen','wax'],resource){
 			tag @s add captured_by_b
 			tag @s remove captured_by_a
 			function gen:<%resource%>/capture_effects
+			team join b @e[type=area_effect_cloud,tag=gen.<%resource%>.biome,distance=..10]
 			scoreboard players set @s cap 0
 			!IF(resource === 'wax'){
 				fill ~2 ~-1 ~2 ~-2 ~-1 ~-2 minecraft:blue_stained_glass
