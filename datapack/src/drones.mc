@@ -12,7 +12,7 @@ function load {
 }
 
 function summon {
-	summon bee ~ ~ ~ {Tags:['drone','new'], PersistenceRequired:1b,NoAI:false,Health:20f,Attributes:[{Name:generic.max_health,Base:20}],CustomName:'{"text":"Drone"}',CustomNameVisible:true}
+	summon bee ~ ~ ~ {Tags:['drone','new'], PersistenceRequired:1b,NoAI:false,Health:20f,Attributes:[{Name:generic.max_health,Base:40}],CustomName:'{"text":"Drone"}',CustomNameVisible:true}
 	execute as @e[type=bee,tag=new,distance=..1,limit=1] at @s run {
 		execute store result score @s id run scoreboard players add last.id i 1
 		scoreboard players set @s state 0
@@ -26,6 +26,8 @@ function summon {
 }
 
 clock 2s {
+	effect give @e[type=bee] minecraft:regeneration 1 2 true
+
 	execute as @e[type=bee,tag=drone] run {
 		tag @s remove tick_a
 		tag @s remove tick_b

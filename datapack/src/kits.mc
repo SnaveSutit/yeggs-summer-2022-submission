@@ -42,7 +42,7 @@ function beefender {
 	item replace entity @s armor.legs with minecraft:diamond_leggings{HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s}]}
 	item replace entity @s armor.feet with minecraft:diamond_boots{HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s}]}
 
-	item replace entity @s hotbar.0 with minecraft:iron_sword{HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s},{id:"minecraft:sweeping",lvl:3s}]}
+	item replace entity @s hotbar.0 with minecraft:stone_sword{HideFlags:127,Unbreakable:1b,Enchantments:[{id:"minecraft:binding_curse",lvl:1s},{id:"minecraft:sweeping",lvl:3s}]}
 	item replace entity @s hotbar.1 with minecraft:shield{HideFlags:127,Unbreakable:1b}
 	item replace entity @s hotbar.7 with minecraft:golden_apple 2
 	item replace entity @s hotbar.8 with minecraft:cooked_beef 20
@@ -67,9 +67,8 @@ function pollenator {
 	item replace entity @s inventory.2 with minecraft:tipped_arrow{Potion:"minecraft:weakness"} 16
 	item replace entity @s inventory.3 with minecraft:arrow 16
 
-	item replace entity @s hotbar.4 with minecraft:lingering_potion{Potion:"minecraft:turtle_master"} 1
-	item replace entity @s hotbar.5 with minecraft:splash_potion{Potion:"minecraft:strong_regeneration"} 1
-	item replace entity @s hotbar.6 with minecraft:splash_potion{Potion:"minecraft:invisibility"} 1
+	item replace entity @s hotbar.5 with minecraft:lingering_potion{Potion:"minecraft:turtle_master"} 1
+	item replace entity @s hotbar.6 with minecraft:splash_potion{Potion:"minecraft:strong_regeneration"} 1
 	item replace entity @s hotbar.7 with minecraft:splash_potion{Potion:"minecraft:strong_healing"} 1
 	item replace entity @s hotbar.8 with minecraft:cooked_beef 20
 

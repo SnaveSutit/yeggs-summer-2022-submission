@@ -58,10 +58,14 @@ function load {
 
 	forceload add -82 -316 84 -115
 
-	tellraw @a {"text":"Reloaded!"}
+	schedule function statues:animation_loop 10t replace
+	schedule function haha_bee:animation_loop 10t replace
+	# tellraw @a {"text":"Reloaded!"}
 }
 
 function reset {
+	kill @e[tag=shop.kits]
+	kill @e[tag=shop.upgrades]
 	kill @e[type=bee,tag=drone]
 	kill @e[type=bee,tag=soldier]
 	kill @e[type=marker,tag=hive]
@@ -75,22 +79,41 @@ function reset {
 	kill @e[type=area_effect_cloud,tag=gen.pollen.biome]
 	kill @e[type=area_effect_cloud,tag=gen.wax.biome]
 
+	summon area_effect_cloud -68 46 -300 {Tags:['team_display'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomName:'{"text":"Red Team","color":"red"}',CustomNameVisible:1b}
+	summon area_effect_cloud -64 46 -300 {Tags:['team_display'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomName:'{"text":"Blue Team","color":"blue"}',CustomNameVisible:1b}
+	summon area_effect_cloud -74.0 46 -295.0 {Tags:['team_display'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomName:'{"text":"Spectators","color":"gray"}',CustomNameVisible:1b}
+
 	function haha_bee:remove/all
-	execute positioned -6 26 -288 rotated -90 0 run function haha_bee:summon/default
-	execute positioned -6 26 -286 rotated -90 0 run function haha_bee:summon/default
-	execute positioned 0 26 -162 rotated 90 0 run function haha_bee:summon/default
-	execute positioned 0 26 -164 rotated 90 0 run function haha_bee:summon/default
+
+	execute positioned -6 26 -288 rotated -90 0 run {
+		function shops:kits/summon
+		function haha_bee:summon/default
+	}
+	execute positioned 0 26 -162 rotated 90 0 run {
+		function shops:kits/summon
+		function haha_bee:summon/default
+	}
+
+	execute positioned -6 26 -286 rotated -90 0 run {
+		function shops:upgrades/summon
+		function haha_bee:summon/default
+	}
+	execute positioned 0 26 -164 rotated 90 0 run {
+		function shops:upgrades/summon
+		function haha_bee:summon/default
+	}
+
 	execute as @e[type=minecraft:marker,tag=aj.haha_bee.root] run function haha_bee:animations/idle/play
 
 	function statues:remove/all
 	execute positioned -67 45 -288 rotated 180 0 run function statues:summon/default
 	execute as @e[type=marker,tag=aj.statues.root] run function statues:animations/idle/play
 
-	execute positioned -2 26 -172 run {
+	execute positioned -3 28 -173 run {
 		function targets:summon_hive
 		tag @e[type=marker,tag=hive,distance=..1] add team_a
 	}
-	execute positioned -4 26 -278 run {
+	execute positioned -3 28 -277 run {
 		function targets:summon_hive
 		tag @e[type=marker,tag=hive,distance=..1] add team_b
 	}
@@ -131,14 +154,23 @@ function reset {
 	execute positioned -43 29 -187 run {
 		function targets:summon_wax
 		function gen:wax/summon
+		execute as @e[type=area_effect_cloud,distance=..10,tag=gen.wax.biome] run {
+			data modify entity @s CustomName set value '[{"text":"Wasp Nest"}]'
+		}
 	}
 	execute positioned -3 26 -225 run {
 		function targets:summon_wax
 		function gen:wax/summon
+		execute as @e[type=area_effect_cloud,distance=..10,tag=gen.wax.biome] run {
+			data modify entity @s CustomName set value '[{"text":"The Garden"}]'
+		}
 	}
 	execute positioned 38 29 -263 run {
 		function targets:summon_wax
 		function gen:wax/summon
+		execute as @e[type=area_effect_cloud,distance=..10,tag=gen.wax.biome] run {
+			data modify entity @s CustomName set value '[{"text":"Beehive"}]'
+		}
 	}
 
 	execute positioned 7 29 -174 run {
@@ -160,23 +192,6 @@ function reset {
 		scoreboard players set #<%team%>.attacking v 0
 	}
 
-	kill @e[tag=shop.kits]
-	kill @e[tag=shop.upgrades]
-
-	execute positioned -3 25 -165 run {
-		function shops:kits/summon
-	}
-	execute positioned -3 25 -285 run {
-		function shops:kits/summon
-	}
-
-	execute positioned -1 25 -165 run {
-		function shops:upgrades/summon
-	}
-	execute positioned -5 25 -285 run {
-		function shops:upgrades/summon
-	}
-
 	scoreboard players set #running v 0
 	function upgrades:reset
 	setworldspawn -66 45 -294 0
@@ -189,9 +204,11 @@ function reset {
 	gamemode adventure @a[tag=!Admin]
 
 	setblock -67 45 -292 minecraft:crimson_button
+	setblock -65 45 -292 minecraft:crimson_button
 
 	kill @e[type=area_effect_cloud,tag=start_button]
 	summon area_effect_cloud -67 45 -291.1 {Tags:['start_button'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomName:'{"text":"Start map!"}',CustomNameVisible:1b}
+	summon area_effect_cloud -65 45 -291.1 {Tags:['start_button'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomName:'{"text":"How to play"}',CustomNameVisible:1b}
 
 	clear @a
 	effect give @a minecraft:regeneration 1 255 true
@@ -263,6 +280,11 @@ function tick {
 	}
 
 	execute if block -67 45 -292 minecraft:crimson_button[powered=true] run function map:check_start_condition
+	execute if block -65 45 -292 minecraft:crimson_button[powered=true] run {
+		tellraw @a [{"text":"","color":"yellow"},{"text":"--- HOW TO PLAY ---","color":"gold"},{"text":"\nCapture points to generate resources."},{"text":"\nYour Drones will automatically collect and transport the generated resources back to your base."},{"text":"\n"},{"text":"\nYou can purchase upgrades and bees in the Upgrades shop at your base."},{"text":"\n"},{"text":"\nCaptured generators overfull? Buy more drones for more resource thoughput."},{"text":"\nDrones overworked? Upgrade generators or capture more points to produce more resources."},{"text":"\n"},{"text":"\nYou cannot directly attack the enemy base. Instead; You must build up a swarm of 20 soldier bees."},{"text":"\nOnce you've built up 20 soldiers, the swarm will automatically attack the enemy base."},{"text":"\n"},{"text":"\nTired of using a sword? Purchase a different kit in the Kits shop at your base!"}]
+		setblock -65 45 -292 air
+		setblock -65 45 -292 minecraft:crimson_button
+	}
 }
 
 clock 10t {
@@ -370,10 +392,10 @@ function start {
 	team join spectator @a[team=]
 	gamemode adventure @a[team=!spectator,tag=!Admin]
 	gamemode spectator @a[team=spectator]
-	spawnpoint @a[team=a] -2 26 -172 0
-	tp @a[team=a] -2 26 -172 0 0
-	spawnpoint @a[team=b] -4 26 -278 0
-	tp @a[team=b] -4 26 -278 0 0
+	spawnpoint @a[team=a] -4 25 -163 180
+	tp @a[team=a] -4 25 -163 180 0
+	spawnpoint @a[team=b] -2 25 -287 0
+	tp @a[team=b] -2 25 -287 0 0
 	tp @a[team=spectator] -3 28 -225
 
 	scoreboard objectives setdisplay sidebar.team.red display_a
@@ -395,6 +417,8 @@ function start {
 	}
 	scoreboard players add #game id 1
 	scoreboard players operation @a game_id = #game id
+
+	execute as @e[type=minecraft:marker,tag=aj.statues.root] run function statues:animations/idle/stop
 }
 
 clock 6s {

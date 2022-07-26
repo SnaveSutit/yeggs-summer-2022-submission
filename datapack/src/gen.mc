@@ -55,11 +55,11 @@ LOOP(['pollen','wax'],resource){
 				execute if entity @s[tag=!captured_by_b] as @a[distance=..5,team=b] run function gen:<%resource%>/cap_b
 
 				execute if score #old_cap v matches 0 if score @s cap matches 1 run {
-					execute if entity @s[tag=captured_by_a] as @a[team=a] run {
-						tellraw @s [{"text":"","color":"red"},{"text":"You're losing "},{"selector":"@e[type=area_effect_cloud,tag=gen.<%resource%>.biome,limit=1,distance=..10]","color":"aqua"},{"text":"!"}]
+					execute if entity @s[tag=captured_by_a] run {
+						tellraw @a[team=a] [{"text":"","color":"red"},{"text":"You're losing "},{"selector":"@e[type=area_effect_cloud,tag=gen.<%resource%>.biome,limit=1,distance=..10]","color":"aqua"},{"text":"!"}]
 					}
-					execute if entity @s[tag=captured_by_b] as @a[team=b] run {
-						tellraw @s [{"text":"","color":"red"},{"text":"You're losing "},{"selector":"@e[type=area_effect_cloud,tag=gen.<%resource%>.biome,limit=1,distance=..10]","color":"aqua"},{"text":"!"}]
+					execute if entity @s[tag=captured_by_b] run {
+						tellraw @a[team=b] [{"text":"","color":"red"},{"text":"You're losing "},{"selector":"@e[type=area_effect_cloud,tag=gen.<%resource%>.biome,limit=1,distance=..10]","color":"aqua"},{"text":"!"}]
 					}
 				}
 

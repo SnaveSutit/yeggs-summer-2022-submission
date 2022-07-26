@@ -16,7 +16,7 @@ function reset {
 		scoreboard players set #<%team%>.hive.max_bees.increase_multiplier v 2000
 		scoreboard players set #<%team%>.hive.max_bees.cost_multiplier v 1500
 
-		scoreboard players set #<%team%>.new_drone.honey_cost v 5
+		scoreboard players set #<%team%>.new_drone.honey_cost v 3
 		scoreboard players set #<%team%>.new_drone.cost_multiplier v 1000
 
 		scoreboard players set #<%team%>.new_soldier.honey_cost v 10

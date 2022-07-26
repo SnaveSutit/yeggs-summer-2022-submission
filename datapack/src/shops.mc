@@ -6,14 +6,14 @@ dir kits {
 	function summon {
 		execute align xyz positioned ~.5 ~.5 ~.5 run {
 			summon marker ~ ~ ~ {Tags:['shop.kits']}
-			summon area_effect_cloud ~ ~.5 ~ {Tags:['shop.upgrades'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomName:'{"text":"🗡 Kits 🏹","color":"gold"}',CustomNameVisible:1b}
-			setblock ~ ~ ~ minecraft:dropper[facing=down]{CustomName:'{"text":"Kits Shop"}'}
+			summon area_effect_cloud ~ ~.1 ~ {Tags:['shop.upgrades'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomName:'{"text":"🗡 Kits 🏹","color":"gold"}',CustomNameVisible:1b}
+			setblock ~ ~ ~ minecraft:dispenser{CustomName:'{"text":"Kits Shop"}'}
 		}
 	}
 	function kick_player {
 		data modify block ~ ~ ~ Items set value []
 		setblock ~ ~ ~ air
-		setblock ~ ~ ~ minecraft:dropper[facing=down]{CustomName:'{"text":"Kits Shop"}'}
+		setblock ~ ~ ~ minecraft:dispenser{CustomName:'{"text":"Kits Shop"}'}
 	}
 	clock 3t {
 		execute as @e[type=marker,tag=shop.kits] at @s run {
@@ -80,7 +80,7 @@ dir kits {
 								function kits:beefender
 								scoreboard players remove .team_<%team%> honey 20
 								scoreboard players set #purchase_success v 1
-								tellraw @a[team=<%team%>] ["",{"text":"["},{"selector":"@s"},{"text":"]"},{"text":" swapped to the beefender class for 30 honey.","color":"green"}]
+								tellraw @a[team=<%team%>] ["",{"text":"["},{"selector":"@s"},{"text":"]"},{"text":" swapped to the beefender class for 20 honey.","color":"green"}]
 							}
 							execute if score #pollenator_class v matches 1 if score .team_<%team%> honey matches 20.. run {
 								function kits:pollenator
@@ -110,14 +110,14 @@ dir upgrades {
 	function summon {
 		execute align xyz positioned ~.5 ~.5 ~.5 run {
 			summon marker ~ ~ ~ {Tags:['shop.upgrades']}
-			summon area_effect_cloud ~ ~.5 ~ {Tags:['shop.upgrades'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomName:'{"text":"↑ Upgrades 🧪","color":"green"}',CustomNameVisible:1b}
-			setblock ~ ~ ~ minecraft:dropper[facing=down]{CustomName:'{"text":"Upgrade Shop"}'}
+			summon area_effect_cloud ~ ~.1 ~ {Tags:['shop.upgrades'],Age:-2147483648,Duration:-1,WaitTime:-2147483648,CustomName:'{"text":"↑ Upgrades 🧪","color":"green"}',CustomNameVisible:1b}
+			setblock ~ ~ ~ minecraft:dispenser{CustomName:'{"text":"Upgrade Shop"}'}
 		}
 	}
 	function kick_player {
 		data modify block ~ ~ ~ Items set value []
 		setblock ~ ~ ~ air
-		setblock ~ ~ ~ minecraft:dropper[facing=down]{CustomName:'{"text":"Upgrade Shop"}'}
+		setblock ~ ~ ~ minecraft:dispenser{CustomName:'{"text":"Upgrade Shop"}'}
 	}
 	clock 3t {
 		execute as @e[type=marker,tag=shop.upgrades] at @s run {
