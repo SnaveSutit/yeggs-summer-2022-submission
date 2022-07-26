@@ -87,6 +87,12 @@
 				"custom_model_data": 14
 			},
 			"model": "pvbee:rig/statues/bone2"
+		},
+		{
+			"predicate": {
+				"custom_model_data": 15
+			},
+			"model": "pvbee:rig/statues/bone4"
 		}
 	],
 	"aj": {
@@ -94,7 +100,7 @@
 			"79522d85-e23b-94dd-3e9b-a7ff9fff59a2": {
 				"name": "statues",
 				"usedIDs": [
-					[1, 14]
+					[1, 15]
 				]
 			}
 		}

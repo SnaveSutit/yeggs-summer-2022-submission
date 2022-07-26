@@ -51,6 +51,7 @@ function load {
 	scoreboard players set last.id v 0
 
 	gamerule naturalRegeneration true
+	gamerule showDeathMessages true
 	gamerule fallDamage true
 	gamerule drowningDamage false
 	gamerule keepInventory true
@@ -255,20 +256,18 @@ function tick {
 			execute if score #endgame v matches 0 run function map:reset
 		}
 
-		execute if score #<%team%>.attacking v matches 0 if score .team_<%team%> soldiers matches 20.. run {
+		execute if score .team_<%team%> soldiers matches 20.. run {
 			scoreboard players operation #target v = @e[type=marker,tag=drone_target,tag=hive,limit=1,tag=!team_<%team%>] id
 			execute as @e[type=bee,tag=soldier,team=<%team%>] at @s run {
 				scoreboard players operation @s target = #target v
 				scoreboard players operation @s state = #soldier.ATTACK state
 			}
-			title @a[team=<%team%>] times 10 40 10
-			title @a[team=<%team%>] title ""
-			title @a[team=<%team%>] subtitle ["",{"text":"Your swarm is attacking the enemy Hive!","color":"green"}]
-			scoreboard players set #<%team%>.attacking v 1
+			title @a[team=<%team%>] actionbar ["",{"text":"Your swarm is attacking the enemy Hive!","color":"green"}]
+			# scoreboard players set #<%team%>.attacking v 1
 		}
-		execute if score #<%team%>.attacking v matches 1 if score .team_<%team%> soldiers matches ..0 run {
-			scoreboard players set #<%team%>.attacking v 0
-		}
+		# execute if score #<%team%>.attacking v matches 1 if score .team_<%team%> soldiers matches ..0 run {
+		# 	scoreboard players set #<%team%>.attacking v 0
+		# }
 	}
 
 	execute as @e[type=player,scores={death=1..}] run {

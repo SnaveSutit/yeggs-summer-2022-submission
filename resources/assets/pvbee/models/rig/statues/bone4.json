@@ -1,0 +1,23 @@
+{
+	"__credit": "Generated using Animated Java (https://animated-java.dev/)",
+	"textures": {
+		"3": "pvbee:item/pvbee"
+	},
+	"elements": [
+		{
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#3"}
+			},
+			"to": [17.6, 8.6, 8],
+			"from": [-1.6, 1.8, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, -17, 17.2]}
+		}
+	],
+	"display": {
+		"head": {
+			"translation": [0, 5.6, 0],
+			"scale": [4, 4, 4],
+			"rotation": [0, 0, 0]
+		}
+	}
+}

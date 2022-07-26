@@ -56,7 +56,7 @@ dir remove {
 	function this {
 		execute (if entity @s[tag=aj.statues.root] at @s) {
 			scoreboard players operation # aj.id = @s aj.id
-			execute as @e[type=#statues:bone_entities,tag=aj.statues,distance=..5.84] if score @s aj.id = # aj.id run kill @s
+			execute as @e[type=#statues:bone_entities,tag=aj.statues,distance=..6.639] if score @s aj.id = # aj.id run kill @s
 			kill @s
 		} else {
 			tellraw @s [["",{"text":"[ ","color":"dark_gray"},{"text":"AJ","color":"green"},{"text":" → ","color":"light_purple"},{"text":"Error ☠","color":"red"},{"text":" ]","color":"dark_gray"},"\n"],{"text":"→ ","color":"red"},{"text":"The function ","color":"gray"},{"text":"statues:remove/this ","color":"yellow"},{"text":"must be","color":"gray"},"\n",{"text":"executed as @e[tag=aj.statues.root]","color":"light_purple"}]
@@ -90,8 +90,9 @@ dir summon {
 				summon minecraft:area_effect_cloud ^1.25 ^-0.50913 ^-0.05447 {Age:-2147483648,Duration:-1,WaitTime:-2147483648,Tags:['new','aj.statues','aj.statues.bone','aj.statues.bone.left_arm2'],Passengers:[{id:'minecraft:armor_stand',Invisible:true,Marker:false,NoGravity:true,DisabledSlots:4144959,Tags:['new','aj.statues','aj.statues.bone','aj.statues.bone.left_arm2','aj.statues.bone_display'],ArmorItems:[{},{},{},{id:'minecraft:white_dye',Count:1b,tag:{CustomModelData:12}}],Pose:{Head:[-69.031f,45.687f,18.602f]}}]}
 				summon minecraft:area_effect_cloud ^0.74623 ^-1.90375 ^0.06537 {Age:-2147483648,Duration:-1,WaitTime:-2147483648,Tags:['new','aj.statues','aj.statues.bone','aj.statues.bone.bone'],Passengers:[{id:'minecraft:armor_stand',Invisible:true,Marker:false,NoGravity:true,DisabledSlots:4144959,Tags:['new','aj.statues','aj.statues.bone','aj.statues.bone.bone','aj.statues.bone_display'],ArmorItems:[{},{},{},{id:'minecraft:white_dye',Count:1b,tag:{CustomModelData:13}}],Pose:{Head:[-5.175f,14.942f,6.162f]}}]}
 				summon minecraft:area_effect_cloud ^1.25377 ^-1.90375 ^-0.06537 {Age:-2147483648,Duration:-1,WaitTime:-2147483648,Tags:['new','aj.statues','aj.statues.bone','aj.statues.bone.bone2'],Passengers:[{id:'minecraft:armor_stand',Invisible:true,Marker:false,NoGravity:true,DisabledSlots:4144959,Tags:['new','aj.statues','aj.statues.bone','aj.statues.bone.bone2','aj.statues.bone_display'],ArmorItems:[{},{},{},{id:'minecraft:white_dye',Count:1b,tag:{CustomModelData:14}}],Pose:{Head:[5.175f,-14.942f,-8.838f]}}]}
+				summon minecraft:area_effect_cloud ^0 ^1.5245 ^1.4375 {Age:-2147483648,Duration:-1,WaitTime:-2147483648,Tags:['new','aj.statues','aj.statues.bone','aj.statues.bone.bone4'],Passengers:[{id:'minecraft:armor_stand',Invisible:true,Marker:false,NoGravity:true,DisabledSlots:4144959,Tags:['new','aj.statues','aj.statues.bone','aj.statues.bone.bone4','aj.statues.bone_display'],ArmorItems:[{},{},{},{id:'minecraft:white_dye',Count:1b,tag:{CustomModelData:15}}],Pose:{Head:[0f,0f,0f]}}]}
 				# Update rotation and ID of bone entities to match the root entity
-				execute as @e[type=#statues:bone_entities,tag=aj.statues,tag=new,distance=..5.84] positioned as @s run {
+				execute as @e[type=#statues:bone_entities,tag=aj.statues,tag=new,distance=..6.639] positioned as @s run {
 					scoreboard players operation @s aj.id = .aj.last_id aj.i
 					tp @s ~ ~ ~ ~ ~
 					tag @s remove new
@@ -116,7 +117,7 @@ function reset {
 		# Reset animation time
 		scoreboard players set @s aj.frame 0
 		scoreboard players operation .this aj.id = @s aj.id
-		execute as @e[type=minecraft:area_effect_cloud,tag=aj.statues.bone,distance=..5.84] if score @s aj.id = .this aj.id run {
+		execute as @e[type=minecraft:area_effect_cloud,tag=aj.statues.bone,distance=..6.639] if score @s aj.id = .this aj.id run {
 			tp @s[tag=aj.statues.bone.body] ^-1 ^-1.1 ^0
 			tp @s[tag=aj.statues.bone.head] ^-1 ^-0.295 ^-0.106
 			tp @s[tag=aj.statues.bone.right_arm] ^-1.375 ^-0.411 ^-0.028
@@ -131,10 +132,11 @@ function reset {
 			tp @s[tag=aj.statues.bone.left_arm2] ^1.25 ^-0.509 ^-0.054
 			tp @s[tag=aj.statues.bone.bone] ^0.746 ^-1.904 ^0.065
 			tp @s[tag=aj.statues.bone.bone2] ^1.254 ^-1.904 ^-0.065
+			tp @s[tag=aj.statues.bone.bone4] ^0 ^1.525 ^1.438
 			execute store result score .calc aj.i run data get entity @s Air
 			execute store result entity @s Air short 1 run scoreboard players add .calc aj.i 2
 		}
-		execute as @e[type=minecraft:armor_stand,tag=aj.statues.bone,distance=..5.84] if score @s aj.id = .this aj.id run {
+		execute as @e[type=minecraft:armor_stand,tag=aj.statues.bone,distance=..6.639] if score @s aj.id = .this aj.id run {
 			data modify entity @s[tag=aj.statues.bone.body] Pose.Head set value [-7.5f,0f,0f]
 			data modify entity @s[tag=aj.statues.bone.head] Pose.Head set value [-25f,0f,0f]
 			data modify entity @s[tag=aj.statues.bone.right_arm] Pose.Head set value [-133.999f,-3.126f,-30.464f]
@@ -149,6 +151,7 @@ function reset {
 			data modify entity @s[tag=aj.statues.bone.left_arm2] Pose.Head set value [-69.031f,45.687f,18.602f]
 			data modify entity @s[tag=aj.statues.bone.bone] Pose.Head set value [-5.175f,14.942f,6.162f]
 			data modify entity @s[tag=aj.statues.bone.bone2] Pose.Head set value [5.175f,-14.942f,-8.838f]
+			data modify entity @s[tag=aj.statues.bone.bone4] Pose.Head set value [0f,0f,0f]
 			tp @s ~ ~ ~ ~ ~
 		}
 		# If this entity is not the root
@@ -275,7 +278,7 @@ dir animations {
 		function next_frame {
 			scoreboard players operation .this aj.id = @s aj.id
 			scoreboard players operation .this aj.frame = @s aj.frame
-			execute rotated ~ 0 as @e[type=#statues:bone_entities,tag=aj.statues.bone,distance=..4.027] if score @s aj.id = .this aj.id run {
+			execute rotated ~ 0 as @e[type=#statues:bone_entities,tag=aj.statues.bone,distance=..4.826] if score @s aj.id = .this aj.id run {
 				name tree/trunk
 				# Bone Roots
 				execute if entity @s[type=minecraft:area_effect_cloud] run {
@@ -1133,6 +1136,14 @@ dir animations {
 								execute if score .this aj.frame matches 55 run tp @s ^1.172 ^-1.197 ^0.364 ~ ~
 							}
 							execute if score .this aj.frame matches 56 run tp @s ^1.174 ^-1.196 ^0.366 ~ ~
+						}
+					}
+					execute if entity @s[tag=aj.statues.bone.bone4] run {
+						name tree/bone4_root_top
+						execute if score .this aj.frame matches 0..56 run {
+							name tree/bone4_root_0-56
+							execute if score .this aj.frame matches 0 run tp @s ^0 ^1.525 ^1.438 ~ ~
+							execute if score .this aj.frame matches 56 run tp @s ^0 ^1.525 ^1.438 ~ ~
 						}
 					}
 					execute store result entity @s Air short 1 run scoreboard players get .this aj.frame
@@ -2314,6 +2325,14 @@ dir animations {
 								execute if score .this aj.frame matches 55 run data modify entity @s Pose.Head set value [10.2447f,-19.9904f,-7.1862f]
 							}
 							execute if score .this aj.frame matches 56 run data modify entity @s Pose.Head set value [10.1074f,-19.8931f,-7.3565f]
+						}
+					}
+					execute if entity @s[tag=aj.statues.bone.bone4] run {
+						name tree/bone4_display_top
+						execute if score .this aj.frame matches 0..56 run {
+							name tree/bone4_display_0-56
+							execute if score .this aj.frame matches 0 run data modify entity @s Pose.Head set value [0f,0f,0f]
+							execute if score .this aj.frame matches 56 run data modify entity @s Pose.Head set value [0f,0f,0f]
 						}
 					}
 					# Make sure rotation stays aligned with root entity
